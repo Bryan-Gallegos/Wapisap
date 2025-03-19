@@ -1,0 +1,94 @@
+.admin-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Sidebar fijo con 55px */
+.sidebar {
+    width: 55px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 100; /* Mantiene el sidebar sobre otros elementos */
+}
+
+/* Admin Menu fijo */
+.admin-menu-container {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 55px;
+    top: 0;
+    background-color: #ffffff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    padding: 10px;  /* Más espacio interno */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 99;
+    border-right: 2px solid #dee2e6; /* Agregando un borde a la derecha */
+    border-top: 2px solid #dee2e6; /* Agregando un borde en la parte superior */
+    border-radius: 5px; /* Suavizar las esquinas */
+    margin-top: 10px; /* Despegándolo un poco del top */
+}
+
+
+/* Ajuste del contenido */
+.admin-content {
+    margin-left: 305px; /* 55px (Sidebar) + 250px (AdminMenu) */
+    width: calc(100% - 305px);
+    padding: 20px;
+}
+
+/* Títulos principales */
+h2 {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Tarjetas del dashboard */
+.admin-card {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    transition: transform 0.2s ease-in-out;
+    border: none;
+}
+
+.admin-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background-color: #f8f9fa;
+}
+
+/* Números grandes en tarjetas */
+.text-admin-card {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Estilo de tablas */
+.table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+    background: black;
+    color: white;
+}
+
+/* Espaciado en secciones */
+h4 {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #333;
+}

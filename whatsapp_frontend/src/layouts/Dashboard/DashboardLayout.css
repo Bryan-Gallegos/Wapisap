@@ -1,0 +1,13 @@
+.dashboard-container {
+    display: flex;
+}
+
+.content {
+    margin-left: 60px;
+    flex-grow: 1;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.expanded + .content {
+    margin-left: 220px;
+}

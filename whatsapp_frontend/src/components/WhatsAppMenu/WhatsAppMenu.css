@@ -1,0 +1,84 @@
+.whatsapp-menu-container {
+    width: 240px; /* Ajuste de ancho */
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding: 8px; /* Reducir padding */
+    border-right: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden; /* Evita la barra de desplazamiento */
+}
+
+/* Barra de búsqueda */
+.whatsapp-search {
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 11px; /* Reduce el tamaño */
+}
+
+/* Botón Add Account */
+.whatsapp-add-account {
+    font-size: 11px;
+    padding: 5px;
+}
+
+/* Títulos */
+.whatsapp-section-title {
+    font-size: 9px; /* Reduce el tamaño de los títulos */
+    font-weight: bold;
+    color: #777;
+    text-transform: uppercase;
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+/* Ítems del menú */
+.whatsapp-menu .whatsapp-menu-item {
+    font-size: 11px; /* Reduce el tamaño del texto */
+    padding: 6px; /* Reduce el espacio */
+    display: flex;
+    margin-left: 6%;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    color: #333;
+    transition: 0.3s;
+}
+
+.whatsapp-menu .whatsapp-menu-item:hover {
+    background-color: #e9ecef;
+    color: #007bff;
+}
+
+/* Descripción debajo del título */
+.menu-title {
+    font-size: 11px; /* Reduce el tamaño del título */
+    font-weight: bold;
+}
+
+.menu-desc {
+    font-size: 9px; /* Reduce aún más el tamaño de la descripción */
+    color: #777;
+    margin: 0;
+}
+
+/* Íconos de colores */
+.icon {
+    font-size: 16px; /* Disminuir tamaño de iconos */
+}
+
+/* Ajuste del tamaño de los iconos */
+.report-icon { color: #25D366; }
+.profile-icon { color: #25D366; }
+.bulk-icon { color: #AA00FF; }
+.history-icon { color: #B71C1C; }
+.autoresponder-icon { color: #009688; }
+.quick-icon { color: #4CAF50; }
+.chatbot-icon { color: #0091EA; }
+.export-icon { color: #0D47A1; }
+.link-icon { color: #1E88E5; }
+.api-icon { color: #FF6F00; }
+.poll-icon { color: #1976D2; }
+.list-icon { color: #D32F2F; }
+.contact-icon { color: #303F9F; }

@@ -1,0 +1,79 @@
+.admin-menu-container {
+    width: 250px;
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-right: 1px solid #dee2e6;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.admin-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.admin-menu-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Botón Back to Dashboard */
+.admin-back-button {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+/* Estilo de los ítems del menú */
+.admin-menu .admin-menu-item {
+    font-size: 13px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    color: #333;
+    transition: 0.3s;
+}
+
+.admin-menu .admin-menu-item:hover {
+    background-color: #e9ecef;
+    color: #007bff;
+}
+
+/* Estilo para el título y descripción de cada opción */
+.menu-title {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.menu-desc {
+    font-size: 11px;
+    color: #777;
+    margin: 0;
+}
+
+/* Íconos con colores específicos */
+.icon {
+    font-size: 16px;
+}
+
+.api-icon { color: #FF6F00; }
+.chatbot-icon { color: #0091EA; }
+.messages-icon { color: #B71C1C; }
+.permissions-icon { color: #009688; }
+.plans-icon { color: #AA00FF; }
+.roles-icon { color: #4CAF50; }
+.users-icon { color: #0D47A1; }
+.whatsapp-icon { color: #1E88E5; }
