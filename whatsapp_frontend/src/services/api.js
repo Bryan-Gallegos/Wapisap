@@ -359,6 +359,57 @@ export const getRoles = async () => {
     }
 };
 
+// ✅ Crear un nuevo rol
+export const createRole = async (roleData) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.post("roles/", roleData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return response.data; // Devuelve el rol creado
+    } catch (error) {
+        console.error("Error al crear el rol", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Actualizar un rol existente
+export const updateRole = async (roleId, roleData) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.put(`roles/${roleId}/`, roleData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return response.data; // Devuelve el rol actualizado
+    } catch (error) {
+        console.error("Error al actualizar el rol", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Eliminar un rol
+export const deleteRole = async (roleId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        await api.delete(`roles/${roleId}/`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return { success: true, message: "Rol eliminado correctamente" };
+    } catch (error) {
+        console.error("Error al eliminar el rol", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // ✅ Obtener todos los planes
 export const getPlans = async () => {
     try{
