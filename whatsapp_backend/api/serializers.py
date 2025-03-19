@@ -1,24 +1,62 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import *
+from django.contrib.auth import get_user_model
 
-
+User = get_user_model()
 
 # Serializador para Usuarios
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'plan', 'expire_date']
-        extra_kwargs = {'password': {'write_only': True}}  # No se muestra en respuestas
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'is_staff': {'read_only': True}, # No permitir que el frontend modifique estos valores directamente
+            'is_superuser': {'read_only': True}
+            }  # No se muestra en respuestas
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        return super().create(validated_data)
+        password = validated_data.pop('password', None)
+        role = validated_data.pop('role', '')
+
+        # Crear Usuario
+        user = User(**validated_data)
+        if password:
+            user.password = make_password(password)
+
+        # Si el rol es "admin", hacerlo superusuario y staff
+        if role == "admin":
+            user.is_staff = True
+            user.is_superuser = True
+        else:
+            user.is_staff = False
+            user.is_superuser = False
+        
+        user.save()
+        return user
 
     def update(self, instance, validated_data):
-        if 'password' in validated_data:
-            validated_data['password'] = make_password(validated_data['password'])
-        return super().update(instance, validated_data)
+        password = validated_data.pop('password', None)
+        role = validated_data.get('role', instance.role)  # Mantener el rol si no se envía en la actualización
+
+        # Si el usuario está cambiando su contraseña
+        if password:
+            instance.password = make_password(password)
+
+        # Si el rol es "admin", hacer que tenga permisos
+        if role == "admin":
+            instance.is_staff = True
+            instance.is_superuser = True
+        else:
+            instance.is_staff = False
+            instance.is_superuser = False
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
 # Serializador para Roles
 class RoleSerializer(serializers.ModelSerializer):

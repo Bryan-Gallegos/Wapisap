@@ -6,27 +6,29 @@ import { getRoles, getUsers, deleteUser, createUser, updateUser, getPlans } from
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { FaPlus, FaUser } from "react-icons/fa";
+import { FaPlus, FaUsers } from "react-icons/fa";
 import "./Users.css";
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState({});
-  const [rolesList, setRolesList] = useState([]);
-  const [plans, setPlans] = useState({});
-  const [search, setSearch] = useState("");
-  const [show, setShow] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showUserDetails, setShowUserDetails] = useState(false);
-  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
-  const [showEditExpireDate, setShowEditExpireDate] = useState(false);
-  const [selectedUserExpireDate, setSelectedUserExpireDate] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const usersPerPage = 5; // Tamaño de la paginación
+  const [users, setUsers] = useState([]); // USERS BY API
+  const [roles, setRoles] = useState({}); //ROLES BY API
+  const [rolesList, setRolesList] = useState([]); //ROLELIST BY API
+  const [plans, setPlans] = useState({}); //PLANS BY API
+  const [search, setSearch] = useState(""); //SEARCH USER
+  const [show, setShow] = useState(false); //SHOW MODAL CREATE/EDIT USER
+  const [selectedUser, setSelectedUser] = useState(null); //USER SELECTED
+  const [currentPage, setCurrentPage] = useState(1); //CURRENT PAGE OF PAGINATION
+  const [showUserDetails, setShowUserDetails] = useState(false); //VARIABLE FOR VIEW USER
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null); //VARIABLE FOR USER SELECTED FOR VIEW USER
+  const [showEditExpireDate, setShowEditExpireDate] = useState(false); //VARIABLE FOR EDIT EXPIRE DATE
+  const [selectedUserExpireDate, setSelectedUserExpireDate] = useState(null); //VARIABLE FOR USER SELECTED FOR EDIT EXPIRE DATE
+  const [showDeleteModal, setShowDeleteModal] = useState(false); //SHOW MODAL DELETE USER
+  const [userToDelete, setUserToDelete] = useState(null); //VARIABLE USER FOR DELETED
+  const [showNotificationModal, setShowNotificationModal] = useState(false); //SHOW MODAL NOTIFICATION
+  const [notificationMessage, setNotificationMessage] = useState(""); //MESSAGE FOR NOTIFICATION
+  const [showEditPlan, setShowEditPlan] = useState(false); //SHOW MODAL EDIT PLAN
+  const [selectedUserPlan, setSelectedUserPlan] = useState(null); //VARIABLE FOR USER SELECTED FOR EDIT PLAN
+  const usersPerPage = 5; // Pagination size
 
   useEffect(() => {
     fetchUsers();
@@ -35,20 +37,20 @@ const Users = () => {
     fetchRolesList();
   }, []);
 
-  //Función para obtener todos los usuarios
+  //Function to obtain all users
   const fetchUsers = async () => {
     try {
-      const response = await getUsers(); // Obtiene todos los usuarios sin paginación
+      const response = await getUsers(); // Gets all users without paging
       setUsers(response.results || response);
     } catch (error) {
       console.error("Error getting users", error);
     }
   };
 
-  //Función para obtener todos los roles(solamente el name)
+  //Function to get all roles (only the name)
   const fetchRoles = async () => {
     try {
-      const response = await getRoles(); // Llama a la API de roles
+      const response = await getRoles(); // Call the role API
       const rolesMap = {};
       response.results.forEach(role => {
         rolesMap[role.id] = role.name;
@@ -59,13 +61,13 @@ const Users = () => {
     }
   };
 
-  //Función para obtener todos los planes
+  //Function to obtain all plans
   const fetchPlans = async () => {
     try {
-      const response = await getPlans(); // Llamar a la API de planes
+      const response = await getPlans(); // Calling the Plans API
       const plansMap = {};
       response.results.forEach(plan => {
-        plansMap[plan.id] = plan.name; // Mapeamos ID -> Nombre
+        plansMap[plan.id] = plan.name; // Map ID -> Name
       });
       setPlans(plansMap);
     } catch (error) {
@@ -73,34 +75,34 @@ const Users = () => {
     }
   };
 
-  //Función para obtener el listado de los roles
+  //Function to obtain the list of roles
   const fetchRolesList = async () => {
     try {
       const response = await getRoles();
-      if (response && Array.isArray(response.results)) { // Verificamos si es un array
+      if (response && Array.isArray(response.results)) { // We check if it is an array
         setRolesList(response.results);
       } else {
         setRolesList([]); // Evitamos que sea undefined
       }
     } catch (error) {
       console.error("Error obtaining the list of roles", error);
-      setRolesList([]); // En caso de error, mantenemos un array vacío
+      setRolesList([]); // In case of error, we keep an empty array
     }
   };
 
-  // Handle para mostrat el modal de Añadir/Editar
+  // Handle to display the Add/Edit modal
   const handleShow = (user) => {
     setSelectedUser(user);
     setShow(true);
   };
 
-  // Handle para cerrar el modal de Añadir/Editar
+  // Handle to close the Add/Edit modal
   const handleClose = () => {
     setSelectedUser(null);
     setShow(false);
   };
 
-  // Handles para el Modal de View Details
+  // Handles for View Details Modal
   const handleShowUserDetails = (user) => {
     setSelectedUserDetails(user);
     setShowUserDetails(true);
@@ -111,7 +113,7 @@ const Users = () => {
     setShowUserDetails(false);
   };
 
-  // Handles para el Modal de Edit Expire Date
+  // Handles for the Edit Expire Date Modal
   const handleShowEditExpireDate = (user) => {
     setSelectedUserExpireDate(user);
     setShowEditExpireDate(true);
@@ -122,25 +124,25 @@ const Users = () => {
     setShowEditExpireDate(false);
   };
 
-  // Función para cambiar el expire_date
+  // Function to change the expire_date
   const handleUpdateExpireDate = async (values, { setSubmitting }) => {
     try {
-      // Solo enviar los campos que realmente cambian
+      // Only send the fields that actually change
       const updatedUser = {
-        expire_date: values.expire_date  // Solo enviamos expire_date
+        expire_date: values.expire_date  // We only send expire_date
       };
 
       await updateUser(selectedUserExpireDate.id, updatedUser);
       showNotification("Expiration date correctly updated.");
-      fetchUsers();  // Recargar usuarios
-      handleCloseEditExpireDate();  // Cerrar modal
+      fetchUsers();  // Reload users
+      handleCloseEditExpireDate();  // Close modal
     } catch (error) {
       showNotification("Error updating the expiration date.");
     }
     setSubmitting(false);
   };
 
-  // Handles para Eliminar un usuario
+  // Handles to delete a user
   const handleShowDeleteUser = (user) => {
     setUserToDelete(user);
     setShowDeleteModal(true);
@@ -151,7 +153,7 @@ const Users = () => {
     setShowDeleteModal(false);
   }
 
-  // Función para Eliminar un usuario
+  // Delete a user function
   const handleDeleteUser = async () => {
     if (userToDelete) {
       try {
@@ -165,13 +167,40 @@ const Users = () => {
     }
   };
 
-  // Función para mostrar la notificación (acpetado o rechazado)
+  // Function for displaying notification (accepted or rejected)
   const showNotification = (message) => {
     setNotificationMessage(message);
     setShowNotificationModal(true);
   };
 
-  // Validación con Yup
+  // Handles to edit plan
+  const handleShowEditPlan = (user) => {
+    setSelectedUserPlan(user);
+    setShowEditPlan(true);
+  };
+
+  const handleCloseEditPlan = () => {
+    setSelectedUserPlan(null);
+    setShowEditPlan(false);
+  };
+
+  // Function for change the plan of user
+  const handleUpdatePlan = async (values, { setSubmitting }) => {
+    try {
+      const updatedUser = { plan: values.plan };
+
+      await updateUser(selectedUserPlan.id, updatedUser);
+      showNotification("Plan updated successfully.");
+      fetchUsers();
+      handleCloseEditPlan();
+    } catch (error) {
+      showNotificationModal("Error updating plan.");
+    }
+
+    setSubmitting(false);
+  };
+
+  // Validation with Yup
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("The username is required"),
     first_name: Yup.string().required("The name is required"),
@@ -185,7 +214,7 @@ const Users = () => {
     role: Yup.string().required("The role is required"),
   });
 
-  // Función para enviar los datos
+  // Function for sending data
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const userData = {
@@ -198,7 +227,7 @@ const Users = () => {
         expire_date: values.expire_date || null,
       };
 
-      // Si el usuario ingresó una contraseña, la enviamos
+      // If the user has entered a password, we send it to
       if (values.password) {
         userData.password = values.password;
       }
@@ -221,7 +250,7 @@ const Users = () => {
   };
 
 
-  // Paginación
+  // Pagination
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -235,7 +264,7 @@ const Users = () => {
       <div className="admin-content">
         <Topbar />
         <Container fluid className="p-4">
-          <h2><FaUser /> Users</h2>
+          <h2><FaUsers color="#007bff" /> Users</h2>
           <Row className="mb-3">
             <Col md={7}>
               <Form.Control
@@ -269,28 +298,28 @@ const Users = () => {
                   <td>{user.first_name} {user.last_name}</td>
                   <td>{user.email}</td>
 
-                  {/* Rol con estilo */}
+                  {/* Role with style */}
                   <td>
                     <span className={`role-badge role-${roles[user.role] || "default"}`}>
                       {roles[user.role] || "Sin rol"}
                     </span>
                   </td>
 
-                  {/* Plan con estilo */}
+                  {/* Plan with style */}
                   <td>
                     <span className="plan-badge">
                       {plans[user.plan] || "Sin plan"}
                     </span>
                   </td>
 
-                  {/* Expire Date con formato */}
+                  {/* Expire Date with style and format date */}
                   <td>
                     <span className="expire-date-badge">
                       {user.expire_date ? new Date(user.expire_date + "T00:00:00").toLocaleDateString() : "Forever"}
                     </span>
                   </td>
 
-                  {/* Acciones */}
+                  {/* Actions */}
                   <td>
                     <div className="action-buttons">
                       <Button
@@ -306,6 +335,13 @@ const Users = () => {
                         onClick={() => handleShow(user)}
                       >
                         ✏️ Edit
+                      </Button>
+                      <Button
+                        variant="outli-warning"
+                        size="sm"
+                        onClick={() => handleShowEditPlan(user)}
+                      >
+                        📜 Edit Plan
                       </Button>
                       <Button
                         variant="outline-danger"
@@ -329,7 +365,7 @@ const Users = () => {
           </Table>
 
 
-          {/* Paginación */}
+          {/* Pagination */}
           <Pagination className="custom-pagination">
             {[...Array(Math.ceil(users.length / usersPerPage)).keys()].map(number => (
               <Pagination.Item
@@ -345,7 +381,7 @@ const Users = () => {
         </Container>
       </div>
 
-      {/* Modal de Agregar/Editar Usuario con Formik */}
+      {/* Add/Edit User Modal with Formik */}
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>{selectedUser ? "✏️ Edit User" : "➕ Create User"}</Modal.Title>
@@ -460,7 +496,7 @@ const Users = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Modal de Editar Expire Date */}
+      {/* Modal Edit Expire Date */}
       <Modal show={showEditExpireDate} onHide={handleCloseEditExpireDate} centered>
         <Modal.Header closeButton>
           <Modal.Title>📆 Edit Expire Date</Modal.Title>
@@ -469,7 +505,7 @@ const Users = () => {
           <Formik
             initialValues={{
               username: selectedUserExpireDate?.username || "",
-              password: "", // Se debe ingresar una contraseña obligatoriamente
+              password: "", // A password must be entered
               expire_date: selectedUserExpireDate?.expire_date || "",
             }}
             onSubmit={handleUpdateExpireDate}
@@ -513,7 +549,7 @@ const Users = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Modal de View para ver los datos del usuario */}
+      {/* View modal for viewing user data */}
       <Modal show={showUserDetails} onHide={handleCloseUserDetails} centered>
         <Modal.Header closeButton>
           <Modal.Title>👤 User Details</Modal.Title>
@@ -535,7 +571,8 @@ const Users = () => {
           <Button variant="danger" onClick={handleCloseUserDetails}>Cerrar</Button>
         </Modal.Footer>
       </Modal>
-      {/* Modal de Delete para eliminar un usuario */}
+
+      {/* Delete modal to delete a user */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteUser} centered>
         <Modal.Header closeButton>
           <Modal.Title>❌ Confirm Delete</Modal.Title>
@@ -555,7 +592,7 @@ const Users = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Modal de Notificación */}
+      {/* Modal Notification */}
       <Modal show={showNotificationModal} onHide={() => {
         setShowNotificationModal(false);
       }} centered>
@@ -572,8 +609,48 @@ const Users = () => {
             Accept
           </Button>
         </Modal.Footer>
-
       </Modal>
+
+      {/* Modal Edit Plan */}
+      <Modal show={showEditPlan} onHide={handleCloseEditPlan} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>📜 Edit User Plan</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={{
+              plan: selectedUserPlan?.plan || "",
+            }}
+            onSubmit={handleUpdatePlan}
+          >
+            {({ values, handleChange, handleSubmit }) => (
+              <Form onSubmit={handleSubmit} className="modal-form">
+
+                {/* Seleccionar Plan */}
+                <Form.Group className="mb-3">
+                  <Form.Label>📜 Select Plan</Form.Label>
+                  <Form.Select name="plan" value={values.plan} onChange={handleChange}>
+                    <option value="">Select a Plan</option>
+                    {Object.keys(plans).map((planId) => (
+                      <option key={planId} value={planId}>{plans[planId]}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+
+                <div className="modal-buttons">
+                  <Button variant="secondary" onClick={handleCloseEditPlan}>
+                    ❌ Cancel
+                  </Button>
+                  <Button variant="success" type="submit">
+                    💾 Save
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </Modal.Body>
+      </Modal>
+
     </div>
   );
 };
