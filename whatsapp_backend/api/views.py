@@ -1,14 +1,20 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .models import *
 from .serializers import *
+from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
+
+User = get_user_model()
+
 
 # ===============================
 # USUARIOS
 # ===============================
+
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -17,7 +23,26 @@ class UserListCreateView(generics.ListCreateAPIView):
 class UserRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]  # Solo autenticados pueden ver/modificar
+    permission_classes = [IsAuthenticated | IsAdminUser]  
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()  
+        authenticated_user = request.user  
+
+        # Permitir a los administradores actualizar sin contraseña
+        if authenticated_user.is_staff or authenticated_user.is_superuser:
+            serializer = self.get_serializer(user, data=request.data, partial=True)  # Permitir actualización parcial
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Para usuarios normales, se requiere contraseña
+        if "password" not in request.data:
+            return Response({"error": "Password is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().update(request, *args, **kwargs)
 
 # ===============================
 # ROLES (Solo admins)

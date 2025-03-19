@@ -6,7 +6,7 @@ import { getRoles, getUsers, deleteUser, createUser, updateUser, getPlans } from
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaUser } from "react-icons/fa";
 import "./Users.css";
 
 const Users = () => {
@@ -18,8 +18,14 @@ const Users = () => {
   const [show, setShow] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showUserDetails, setShowUserDetails] = useState(null);
+  const [showUserDetails, setShowUserDetails] = useState(false);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [showEditExpireDate, setShowEditExpireDate] = useState(false);
+  const [selectedUserExpireDate, setSelectedUserExpireDate] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const usersPerPage = 5; // Tamaño de la paginación
 
   useEffect(() => {
@@ -29,15 +35,17 @@ const Users = () => {
     fetchRolesList();
   }, []);
 
+  //Función para obtener todos los usuarios
   const fetchUsers = async () => {
     try {
       const response = await getUsers(); // Obtiene todos los usuarios sin paginación
       setUsers(response.results || response);
     } catch (error) {
-      console.error("Error al obtener usuarios", error);
+      console.error("Error getting users", error);
     }
   };
 
+  //Función para obtener todos los roles(solamente el name)
   const fetchRoles = async () => {
     try {
       const response = await getRoles(); // Llama a la API de roles
@@ -47,10 +55,11 @@ const Users = () => {
       });
       setRoles(rolesMap);
     } catch (error) {
-      console.error("Error al obtener los roles", error);
+      console.error("Error getting roles", error);
     }
   };
 
+  //Función para obtener todos los planes
   const fetchPlans = async () => {
     try {
       const response = await getPlans(); // Llamar a la API de planes
@@ -60,10 +69,11 @@ const Users = () => {
       });
       setPlans(plansMap);
     } catch (error) {
-      console.error("Error al obtener los planes", error);
+      console.error("Error getting plans", error);
     }
   };
 
+  //Función para obtener el listado de los roles
   const fetchRolesList = async () => {
     try {
       const response = await getRoles();
@@ -73,28 +83,24 @@ const Users = () => {
         setRolesList([]); // Evitamos que sea undefined
       }
     } catch (error) {
-      console.error("Error al obtener el listado de roles", error);
+      console.error("Error obtaining the list of roles", error);
       setRolesList([]); // En caso de error, mantenemos un array vacío
     }
   };
 
-  const handleDelete = async (userId) => {
-    if (window.confirm("¿Estás seguro de eliminar este usuario?")) {
-      await deleteUser(userId);
-      fetchUsers();
-    }
-  };
-
+  // Handle para mostrat el modal de Añadir/Editar
   const handleShow = (user) => {
     setSelectedUser(user);
     setShow(true);
   };
 
+  // Handle para cerrar el modal de Añadir/Editar
   const handleClose = () => {
     setSelectedUser(null);
     setShow(false);
   };
 
+  // Handles para el Modal de View Details
   const handleShowUserDetails = (user) => {
     setSelectedUserDetails(user);
     setShowUserDetails(true);
@@ -105,16 +111,81 @@ const Users = () => {
     setShowUserDetails(false);
   };
 
+  // Handles para el Modal de Edit Expire Date
+  const handleShowEditExpireDate = (user) => {
+    setSelectedUserExpireDate(user);
+    setShowEditExpireDate(true);
+  };
+
+  const handleCloseEditExpireDate = () => {
+    setSelectedUserExpireDate(null);
+    setShowEditExpireDate(false);
+  };
+
+  // Función para cambiar el expire_date
+  const handleUpdateExpireDate = async (values, { setSubmitting }) => {
+    try {
+      // Solo enviar los campos que realmente cambian
+      const updatedUser = {
+        expire_date: values.expire_date  // Solo enviamos expire_date
+      };
+
+      await updateUser(selectedUserExpireDate.id, updatedUser);
+      showNotification("Expiration date correctly updated.");
+      fetchUsers();  // Recargar usuarios
+      handleCloseEditExpireDate();  // Cerrar modal
+    } catch (error) {
+      showNotification("Error updating the expiration date.");
+    }
+    setSubmitting(false);
+  };
+
+  // Handles para Eliminar un usuario
+  const handleShowDeleteUser = (user) => {
+    setUserToDelete(user);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteUser = () => {
+    setUserToDelete(null);
+    setShowDeleteModal(false);
+  }
+
+  // Función para Eliminar un usuario
+  const handleDeleteUser = async () => {
+    if (userToDelete) {
+      try {
+        await deleteUser(userToDelete.id);
+        showNotification("User successfully deleted.");
+        fetchUsers();
+        handleCloseDeleteUser();
+      } catch (error) {
+        showNotification("Error deleting user. Please try again.");
+      }
+    }
+  };
+
+  // Función para mostrar la notificación (acpetado o rechazado)
+  const showNotification = (message) => {
+    setNotificationMessage(message);
+    setShowNotificationModal(true);
+  };
+
   // Validación con Yup
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("El nombre de usuario es obligatorio"),
-    first_name: Yup.string().required("El nombre es obligatorio"),
-    last_name: Yup.string().required("El apellido es obligatorio"),
-    email: Yup.string().email("Email inválido").required("El email es obligatorio"),
-    password: Yup.string().required("La contraseña es obligatoria"),
-    role: Yup.string().required("El rol es obligatorio"),
+    username: Yup.string().required("The username is required"),
+    first_name: Yup.string().required("The name is required"),
+    last_name: Yup.string().required("The last_name is required"),
+    email: Yup.string().email("Invalid Email").required("The email is required"),
+    password: Yup.string()
+      .when("isNewUser", {
+        is: true,
+        then: (schema) => schema.required("The password is required")
+      }),
+    role: Yup.string().required("The role is required"),
   });
 
+  // Función para enviar los datos
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const userData = {
@@ -122,24 +193,33 @@ const Users = () => {
         first_name: values.first_name,
         last_name: values.last_name,
         email: values.email,
-        password: values.password,
         role: values.role,
         plan: values.plan || null,
         expire_date: values.expire_date || null,
       };
 
+      // Si el usuario ingresó una contraseña, la enviamos
+      if (values.password) {
+        userData.password = values.password;
+      }
+
       if (selectedUser) {
         await updateUser(selectedUser.id, userData);
+        showNotification("User updated correctly.");
       } else {
         await createUser(userData);
+        showNotification("User created correctly.");
       }
+
       fetchUsers();
       handleClose();
     } catch (error) {
-      console.error("Error al guardar usuario", error);
+      console.error("Error saving user", error);
+      showNotification("Error saving user. Please try again.");
     }
     setSubmitting(false);
   };
+
 
   // Paginación
   const indexOfLastUser = currentPage * usersPerPage;
@@ -155,7 +235,7 @@ const Users = () => {
       <div className="admin-content">
         <Topbar />
         <Container fluid className="p-4">
-          <h2>Users</h2>
+          <h2><FaUser /> Users</h2>
           <Row className="mb-3">
             <Col md={7}>
               <Form.Control
@@ -206,7 +286,7 @@ const Users = () => {
                   {/* Expire Date con formato */}
                   <td>
                     <span className="expire-date-badge">
-                      {user.expire_date ? new Date(user.expire_date).toLocaleDateString() : "Forever"}
+                      {user.expire_date ? new Date(user.expire_date + "T00:00:00").toLocaleDateString() : "Forever"}
                     </span>
                   </td>
 
@@ -230,9 +310,16 @@ const Users = () => {
                       <Button
                         variant="outline-danger"
                         size="sm"
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => handleShowDeleteUser(user)}
                       >
                         🗑 Delete
+                      </Button>
+                      <Button
+                        variant="outline-primary"
+                        size="sm"
+                        onClick={() => handleShowEditExpireDate(user)}
+                      >
+                        ✏️ Edit Expire Date
                       </Button>
                     </div>
                   </td>
@@ -274,6 +361,7 @@ const Users = () => {
               role: selectedUser?.role || "",
               plan: selectedUser?.plan || null,
               expire_date: selectedUser?.expire_date || null,
+              isNewUser: selectedUser ? false : true,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -294,19 +382,21 @@ const Users = () => {
                       <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>🔒 Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="password"
-                        value={values.password}
-                        onChange={handleChange}
-                        isInvalid={touched.password && !!errors.password}
-                      />
-                      <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
+                  {!selectedUser && (
+                    <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label>🔒 Password</Form.Label>
+                        <Form.Control
+                          type="password"
+                          name="password"
+                          value={values.password}
+                          onChange={handleChange}
+                          isInvalid={touched.password && !!errors.password}
+                        />
+                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  )}
                 </Row>
 
                 <Row>
@@ -353,7 +443,7 @@ const Users = () => {
                 <Form.Group className="mb-3">
                   <Form.Label>🛠 Role</Form.Label>
                   <Form.Select name="role" value={values.role} onChange={handleChange}>
-                    <option value="">Selecciona un rol</option>
+                    <option value="">Select a role</option>
                     {rolesList.map((role) => (
                       <option key={role.id} value={role.id}>{role.name}</option>
                     ))}
@@ -369,6 +459,61 @@ const Users = () => {
           </Formik>
         </Modal.Body>
       </Modal>
+
+      {/* Modal de Editar Expire Date */}
+      <Modal show={showEditExpireDate} onHide={handleCloseEditExpireDate} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>📆 Edit Expire Date</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={{
+              username: selectedUserExpireDate?.username || "",
+              password: "", // Se debe ingresar una contraseña obligatoriamente
+              expire_date: selectedUserExpireDate?.expire_date || "",
+            }}
+            onSubmit={handleUpdateExpireDate}
+          >
+            {({ values, handleChange, handleSubmit }) => (
+              <Form onSubmit={handleSubmit} className="modal-form">
+
+                {/* Username */}
+                <Form.Group className="mb-3">
+                  <Form.Label>👤 Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="username"
+                    value={values.username}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+                {/* Expire Date */}
+                <Form.Group className="mb-3">
+                  <Form.Label>📅 Expire Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="expire_date"
+                    value={values.expire_date}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+
+                <div className="modal-buttons">
+                  <Button variant="secondary" onClick={handleCloseEditExpireDate}>
+                    ❌ Cancel
+                  </Button>
+                  <Button variant="success" type="submit">
+                    💾 Save
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal de View para ver los datos del usuario */}
       <Modal show={showUserDetails} onHide={handleCloseUserDetails} centered>
         <Modal.Header closeButton>
           <Modal.Title>👤 User Details</Modal.Title>
@@ -389,6 +534,45 @@ const Users = () => {
         <Modal.Footer>
           <Button variant="danger" onClick={handleCloseUserDetails}>Cerrar</Button>
         </Modal.Footer>
+      </Modal>
+      {/* Modal de Delete para eliminar un usuario */}
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteUser} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>❌ Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {userToDelete && (
+            <p>Are you sure you want to remove <strong>{userToDelete.first_name} {userToDelete.last_name}</strong>?</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteUser}>
+            ❌ Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteUser}>
+            🗑 Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal de Notificación */}
+      <Modal show={showNotificationModal} onHide={() => {
+        setShowNotificationModal(false);
+      }} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>🔔 Notificación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{notificationMessage}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => {
+            setShowNotificationModal(false);
+          }}>
+            Accept
+          </Button>
+        </Modal.Footer>
+
       </Modal>
     </div>
   );
