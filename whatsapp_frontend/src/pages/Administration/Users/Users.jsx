@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Topbar from "../../components/Topbar/Topbar";
-import AdminMenu from "../../components/AdminMenu/AdminMenu";
-import { getRoles, getUsers, deleteUser, createUser, updateUser, getPlans } from "../../services/api";
+import Sidebar from "../../../components/Sidebar/Sidebar";
+import Topbar from "../../../components/Topbar/Topbar";
+import AdminMenu from "../../../components/AdminMenu/AdminMenu";
+import { getRoles, getUsers, deleteUser, createUser, updateUser, getPlans } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";

@@ -6,7 +6,8 @@ import Login from "../pages/Login/Login";
 import WhatsApp from "../pages/Whatsapp/Whatsapp";
 import Administration from "../pages/Administration/Administration";
 import Profile from "../pages/Profile/Profile";
-import Users from "../pages/Users/Users";
+import Users from "../pages/Administration/Users/Users";
+import Roles from "../pages/Administration/Roles/Roles";
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
+      <Route path="/administration/roles" element={<Roles />} />
     </Routes>
   );
 };
