@@ -568,7 +568,7 @@ const Users = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleCloseUserDetails}>Cerrar</Button>
+          <Button variant="danger" onClick={handleCloseUserDetails}>Close</Button>
         </Modal.Footer>
       </Modal>
 
