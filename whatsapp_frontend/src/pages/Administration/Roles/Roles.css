@@ -121,3 +121,14 @@ button:hover {
         width: 100%;
     }
 }
+
+.role-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.role-details li {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}

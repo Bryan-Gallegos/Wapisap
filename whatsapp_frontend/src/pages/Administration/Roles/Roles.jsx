@@ -34,17 +34,17 @@ const Roles = () => {
             const response = await getRoles();
             setRoles(response.results);
         } catch (error) {
-            console.error("Error obteniendo roles.", error);
+            console.error("Error obtaining roles.", error);
         }
     };
 
-    //Get all users and count the amount in wich role
+    // Get all users and count the amount in wich role
     const fetchUsers = async () => {
         try {
             const response = await getUsers();
             setUsers(response.results);
 
-            // Contar cuántos usuarios hay por cada rol
+            // Count how many users there are for each role
             const countByRole = {};
             response.results.forEach(user => {
                 countByRole[user.role] = (countByRole[user.role] || 0) + 1;
@@ -52,18 +52,41 @@ const Roles = () => {
             setRoleUserCount(countByRole);
 
         } catch (error) {
-            console.error("Error obteniendo usuarios.", error);
+            console.error("Error getting users.", error);
         }
+    };
+
+    // Create role
+    const handleSaveRole = async (values, { setSubmitting, resetForm }) => {
+        try {
+            if (selectedRole) {
+                await updateRole(selectedRole.id, values);
+                setNotification({ show: true, message: "Role updated correctly!" });
+            } else {
+                await createRole(values);
+                setNotification({ show: true, message: "Role creating correctly!" });
+            }
+
+            fetchRoles();
+            handleCloseModal();
+            resetForm();
+        } catch (error) {
+            console.error("Error saving role", error);
+            setNotification({ show: true, message: "Error saving role. Please try again." });
+        }
+
+        setSubmitting(false);
     };
 
     // Show details of role
     const handleShowViewRole = (role) => {
-        setSelectedRole(role);
+        const filteredUsers = users.filter(user => user.role === role.id);
+        setSelectedRole({ ...role, users: filteredUsers });
         setShowModal(true);
     };
 
     // Show creation/editing mode
-    const handleShowModal = (role = null) => {
+    const handleShowModal = (role) => {
         setSelectedRole(role);
         setShowModal(true);
     };
@@ -79,12 +102,12 @@ const Roles = () => {
         if (roleToDelete) {
             try {
                 await deleteRole(roleToDelete.id);
-                setNotification({ show: true, message: "¡Rol eliminado correctamente!" });
+                setNotification({ show: true, message: "Role eliminated correctly!" });
                 fetchRoles();
                 handleCloseDeleteModal();
             } catch (error) {
-                console.error("Error eliminando rol", error);
-                setNotification({ show: true, message: "Error eliminando rol. Intenta de nuevo." });
+                console.error("Error deleting role", error);
+                setNotification({ show: true, message: "Error deleting role. Please try again." });
             }
         }
     };
@@ -110,26 +133,26 @@ const Roles = () => {
                         <Col md={7}>
                             <Form.Control
                                 type="text"
-                                placeholder="Buscar rol..."
+                                placeholder="Search role..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </Col>
                         <Col md={5}>
                             <Button variant="success" onClick={() => handleShowModal(null)}>
-                                <FaPlus /> Crear Rol
+                                <FaPlus /> Create Role
                             </Button>
                         </Col>
                     </Row>
 
-                    {/* Tabla de Roles */}
+                    {/* Roles Table */}
                     <Table striped bordered hover>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre del Rol</th>
-                                <th>Cantidad de Usuarios</th>
-                                <th>Acciones</th>
+                                <th>Rol Name</th>
+                                <th>Number of Users</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,17 +160,17 @@ const Roles = () => {
                                 <tr key={role.id}>
                                     <td>{role.id}</td>
                                     <td>{role.name}</td>
-                                    <td>{roleUserCount[role.id] || 0}</td> 
+                                    <td>{roleUserCount[role.id] || 0}</td>
                                     <td>
                                         <div className="action-buttons">
                                             <Button variant="outline-info" size="sm" onClick={() => handleShowViewRole(role)}>
-                                                <FaEye /> Ver
+                                                <FaEye /> View
                                             </Button>
                                             <Button variant="outline-primary" size="sm" onClick={() => handleShowModal(role)}>
-                                                <FaEdit /> Editar
+                                                <FaEdit /> Edit
                                             </Button>
                                             <Button variant="outline-danger" size="sm" onClick={() => handleDeleteRole(role)}>
-                                                <FaTrash /> Eliminar
+                                                <FaTrash /> Delete
                                             </Button>
                                         </div>
                                     </td>
@@ -157,7 +180,7 @@ const Roles = () => {
 
                     </Table>
 
-                    {/* Paginación */}
+                    {/* Pagination */}
                     <Pagination className="custom-pagination">
                         {[...Array(Math.ceil(roles.length / rolesPerPage)).keys()].map(number => (
                             <Pagination.Item
@@ -172,24 +195,82 @@ const Roles = () => {
                 </Container>
             </div>
 
-            {/* Modal para ver detalles del rol */}
+            {/* Modal to view role details */}
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Detalles del Rol</Modal.Title>
+                    <Modal.Title>Role Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedRole && (
                         <div className="role-details">
                             <p><strong>ID:</strong> {selectedRole.id}</p>
-                            <p><strong>Nombre:</strong> {selectedRole.name}</p>
-                            <p><strong>Cantidad de Usuarios:</strong> {roleUserCount[selectedRole.id] || 0}</p>
+                            <p><strong>Name:</strong> {selectedRole.name}</p>
+                            <p><strong>Number of Users:</strong> {roleUserCount[selectedRole.id] || 0}</p>
+
+                            {/* User section with the role */}
+                            {selectedRole.users.length > 0 ? (
+                                <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
+                                    <h5>Users with this role:</h5>
+                                    <ul style={{ listStyle: "none", padding: 0 }}>
+                                        {selectedRole.users.map(user => (
+                                            <li key={user.id} style={{ padding: "5px 0", borderBottom: "1px solid #eee" }}>
+                                                {user.first_name} {user.last_name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : (
+                                <p>There are no users with this role.</p>
+                            )}
                         </div>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleCloseModal}>Cerrar</Button>
+                    <Button variant="danger" onClick={handleCloseModal}>Close</Button>
                 </Modal.Footer>
             </Modal>
+
+            {/* Modal to Create/Edit a Role */}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{selectedRole ? "Edit Role" : "Create New Role"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Formik
+                        initialValues={{ name: selectedRole?.name || "" }}
+                        validationSchema={Yup.object().shape({
+                            name: Yup.string().required("The name of the role is mandatory"),
+                        })}
+                        onSubmit={handleSaveRole}
+                    >
+                        {({ values, handleChange, handleSubmit, errors, touched }) => (
+                            <Form onSubmit={handleSubmit} className="modal-form">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Role Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        value={values.name}
+                                        onChange={handleChange}
+                                        isInvalid={touched.name && !!errors.name}
+                                    />
+                                    <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                                </Form.Group>
+
+                                <div className="modal-buttons">
+                                    <Button variant="secondary" onClick={handleCloseModal}>
+                                        ❌ Cancel
+                                    </Button>
+                                    <Button variant="success" type="submit">
+                                        💾 Save
+                                    </Button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </Modal.Body>
+            </Modal>
+
         </div>
     );
 };

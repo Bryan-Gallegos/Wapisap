@@ -597,7 +597,7 @@ const Users = () => {
         setShowNotificationModal(false);
       }} centered>
         <Modal.Header closeButton>
-          <Modal.Title>🔔 Notificación</Modal.Title>
+          <Modal.Title>🔔 Notification</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>{notificationMessage}</p>
