@@ -86,9 +86,14 @@ class Permission(models.Model):
 class Plan(models.Model):
     name = models.CharField(max_length=50)
     whatsapp_limit = models.IntegerField(default=1)
+    message_limit = models.IntegerField(default=100)
+    automated_replies = models.IntegerField(default=100)
+    simultaneous_campaigns = models.IntegerField(default=2)
+    contact_groups = models.IntegerField(default=50)
+    contacts_per_group = models.IntegerField(default=2000)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} (Messages: {self.message_limit})"
     
 # ==========================
 # MODELO DE CUENTAS DE WHATSAPP
