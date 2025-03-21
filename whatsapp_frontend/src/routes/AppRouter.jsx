@@ -9,6 +9,7 @@ import Profile from "../pages/Profile/Profile";
 import Users from "../pages/Administration/Users/Users";
 import Roles from "../pages/Administration/Roles/Roles";
 import Plans from "../pages/Administration/Plans/Plans";
+import Chatbots from "../pages/Administration/ChatBots/ChatBots";
 
 const AppRouter = () => {
   return (
@@ -27,6 +28,8 @@ const AppRouter = () => {
       <Route path="/administration/users" element={<Users />} />
       <Route path="/administration/roles" element={<Roles />} />
       <Route path="/administration/plans" element={<Plans />} />
+      <Route path="/administration/chatbots" element={<Chatbots />} />
+      
     </Routes>
   );
 };

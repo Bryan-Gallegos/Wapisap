@@ -485,4 +485,28 @@ export const deletePlan = async (planId) => {
     }
 };
 
+// ✅ Obtener los Chatbots
+export const getChatbots = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.get("chatbots/", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener los chatbots", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Crear un Chatbot
+
+// ✅ Actualizar un chatbot ya existente
+
+// ✅ Eliminar un chatbot
+
+
 export default api;
