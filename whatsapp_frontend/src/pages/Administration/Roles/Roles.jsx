@@ -89,7 +89,7 @@ const Roles = () => {
         if (roleToDelete) {
             try {
                 await deleteRole(roleToDelete.id);
-                showNotification("Role successfully deleted.");
+                showNotification(`Role "${roleToDelete.name}" successfully deleted.`);
                 fetchRoles();
                 handleCloseDeleteRole();
             } catch (error) {
@@ -268,7 +268,7 @@ const Roles = () => {
                 </Modal.Body>
             </Modal>
 
-            {/* Modal de Notificaction */}
+            {/* Notificaction Modal */}
             <Modal show={showNotificationModal} onHide={() => setShowNotificationModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>🔔 Notification</Modal.Title>
@@ -281,6 +281,25 @@ const Roles = () => {
                 </Modal.Footer>
             </Modal>
 
+            {/* Modal to delete a role */}
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteRole} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>⚠️ Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {roleToDelete && (
+                        <p>Are you sure you want to delete the role <strong>{roleToDelete.name}</strong>? This action cannot be undone.</p>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseDeleteRole}>
+                        ❌ Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteRole}>
+                        🗑  Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
