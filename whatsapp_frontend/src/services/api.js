@@ -399,11 +399,11 @@ export const deleteRole = async (roleId) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        await api.delete(`roles/${roleId}/`, {
+        const response = await api.delete(`roles/${roleId}/`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return { success: true, message: "Rol eliminado correctamente" };
+        return response.data;
     } catch (error) {
         console.error("Error al eliminar el rol", error.response?.data || error.message);
         throw error;
@@ -428,6 +428,61 @@ export const getPlans = async () => {
     }
 };
 
-// ✅
+// ✅ Crear un nuevo Plan
+export const createPlan = async (planData) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.post("plans/", planData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error al crear el plan", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Actualizar un Plan existente
+export const updatePlan = async (planId, planData) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.put(`plans/${planId}/`, planData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error al actualizar el plan", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Eliminar un Plan
+export const deletePlan = async (planId) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.delete(`plans/${planId}/`,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch(error){
+        console.error("Error al eliminar el plan", error.response?.data || error.message);
+        throw error;
+    }
+};
 
 export default api;

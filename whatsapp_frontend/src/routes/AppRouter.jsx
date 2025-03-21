@@ -8,6 +8,7 @@ import Administration from "../pages/Administration/Administration";
 import Profile from "../pages/Profile/Profile";
 import Users from "../pages/Administration/Users/Users";
 import Roles from "../pages/Administration/Roles/Roles";
+import Plans from "../pages/Administration/Plans/Plans";
 
 const AppRouter = () => {
   return (
@@ -25,6 +26,7 @@ const AppRouter = () => {
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
       <Route path="/administration/roles" element={<Roles />} />
+      <Route path="/administration/plans" element={<Plans />} />
     </Routes>
   );
 };

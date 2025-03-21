@@ -9,7 +9,7 @@ import "./AdminMenu.css";
 const menuItems = [
     { icon: <FaPlug className="icon api-icon" />, title: "API", desc: "Manage system integrations", link: "/administration/api" },
     { icon: <FaRobot className="icon chatbot-icon" />, title: "Chatbots", desc: "Manage chatbot messages", link: "/administration/chatbots" },
-    { icon: <FaComments className="icon messages-icon" />, title: "Permissions", desc: "Review chatbot messages", link: "/administration/messages" },
+    { icon: <FaComments className="icon messages-icon" />, title: "Messages", desc: "Review chatbot messages", link: "/administration/messages" },
     { icon: <FaKey className="icon permissions-icon" />, title: "Permissions", desc: "Set user access levels", link: "/administration/permissions" },
     { icon: <FaDatabase className="icon plans-icon" />, title: "Plans", desc: "Manage subscription plans", link: "/administration/plans" },
     { icon: <FaUserShield className="icon roles-icon" />, title: "Roles", desc: "Manage user roles", link: "/administration/roles" },

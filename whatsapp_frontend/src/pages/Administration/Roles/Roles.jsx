@@ -55,7 +55,7 @@ const Roles = () => {
     };
 
     const handleShow = (role) => {
-        setSelectedRole(role || { name: "" });  // Si no hay rol, creamos uno vacío para 'Create'
+        setSelectedRole(role || { name: "" }); 
         setShow(true);
     };
 
@@ -140,7 +140,7 @@ const Roles = () => {
             <div className="admin-content">
                 <Topbar />
                 <Container fluid className="p-4">
-                    <h2><FaUsersCog color="#007bff" /> Roles Management</h2>
+                    <h2><FaUsersCog color="green" /> Roles Management</h2>
                     <Row className="mb-3">
                         <Col md={7}>
                             <Form.Control
@@ -215,7 +215,7 @@ const Roles = () => {
                             <p><strong>Name:</strong> {selectedRoleDetails.name}</p>
                             <p><strong>Number of Users:</strong> {roleUserCount[selectedRoleDetails.id] || 0}</p>
 
-                            {/* Sección de usuarios con el rol */}
+                            {/* User section with the role */}
                             {selectedRoleDetails.users && selectedRoleDetails.users.length > 0 ? (
                                 <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
                                     <h5>Users with this role:</h5>
@@ -252,13 +252,13 @@ const Roles = () => {
                     >
                         {({ values, handleChange, handleSubmit }) => (
                             <Form onSubmit={handleSubmit}>
-                                {/* Separamos el campo del botón con margen */}
+                                {/* Separate the button field with margin */}
                                 <Form.Group className="mb-4">
                                     <Form.Label>Role Name</Form.Label>
                                     <Form.Control type="text" name="name" value={values.name} onChange={handleChange} />
                                 </Form.Group>
 
-                                {/* Botón alineado a la derecha */}
+                                {/* Button aligned to the right */}
                                 <Modal.Footer className="d-flex justify-content-end">
                                     <Button type="submit" variant="success">Save</Button>
                                 </Modal.Footer>
