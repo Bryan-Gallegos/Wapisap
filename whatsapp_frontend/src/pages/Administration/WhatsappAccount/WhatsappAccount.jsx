@@ -180,14 +180,14 @@ const WhatsaapAccount = () => {
                                     <td>{account.status}</td>
                                     <td>{getUserFullName(account.user)}</td>
                                     <td>
-                                        <Button size="sm" variant="info" onClick={() => handleShowViewModal(account)}>
-                                            <FaEye />
+                                        <Button size="sm" variant="outline-info" onClick={() => handleShowViewModal(account)} title="View Details">
+                                            <FaEye /> View
                                         </Button>{" "}
-                                        <Button size="sm" variant="primary" onClick={() => handleShow(account)}>
-                                            <FaEdit />
+                                        <Button size="sm" variant="outline-primary" onClick={() => handleShow(account)} title="Edit WhatsappAccount">
+                                            <FaEdit /> Edit
                                         </Button>{" "}
-                                        <Button size="sm" variant="danger" onClick={() => handleShowDeleteWhatsappAccount(account)}>
-                                            <FaTrash />
+                                        <Button size="sm" variant="outline-danger" onClick={() => handleShowDeleteWhatsappAccount(account)} title="Delete Whatsapp Account">
+                                            <FaTrash /> Delete
                                         </Button>
                                     </td>
                                 </tr>

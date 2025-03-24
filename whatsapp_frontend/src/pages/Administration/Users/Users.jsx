@@ -292,7 +292,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {currentUsers.map((user) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.first_name} {user.last_name}</td>
@@ -326,6 +326,7 @@ const Users = () => {
                         variant="outline-info"
                         size="sm"
                         onClick={() => handleShowUserDetails(user)}
+                        title="View Details"
                       >
                         👁 View
                       </Button>
@@ -333,6 +334,7 @@ const Users = () => {
                         variant="outline-primary"
                         size="sm"
                         onClick={() => handleShow(user)}
+                        title="Edit User"
                       >
                         ✏️ Edit
                       </Button>
@@ -340,6 +342,7 @@ const Users = () => {
                         variant="outli-warning"
                         size="sm"
                         onClick={() => handleShowEditPlan(user)}
+                        title="Edit Plan"
                       >
                         📜 Edit Plan
                       </Button>
@@ -347,6 +350,7 @@ const Users = () => {
                         variant="outline-danger"
                         size="sm"
                         onClick={() => handleShowDeleteUser(user)}
+                        title="Delete User"
                       >
                         🗑 Delete
                       </Button>
@@ -354,6 +358,7 @@ const Users = () => {
                         variant="outline-primary"
                         size="sm"
                         onClick={() => handleShowEditExpireDate(user)}
+                        title="Edit Expire Date"
                       >
                         ✏️ Edit Expire Date
                       </Button>

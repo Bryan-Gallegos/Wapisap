@@ -140,7 +140,7 @@ const Roles = () => {
             <div className="admin-content">
                 <Topbar />
                 <Container fluid className="p-4">
-                    <h2><FaUsersCog color="green" /> Roles Management</h2>
+                    <h2><FaUsersCog color="green" /> Roles</h2>
                     <Row className="mb-3">
                         <Col md={7}>
                             <Form.Control
@@ -172,13 +172,13 @@ const Roles = () => {
                                     <td>{roleUserCount[role.id] || 0}</td>
                                     <td>
                                         <div className="action-buttons">
-                                            <Button variant="outline-info" size="sm" onClick={() => handleShowViewRole(role)}>
+                                            <Button variant="outline-info" size="sm" onClick={() => handleShowViewRole(role)} title="View Details">
                                                 <FaEye /> View
                                             </Button>
-                                            <Button variant="outline-primary" size="sm" onClick={() => handleShow(role)}>
+                                            <Button variant="outline-primary" size="sm" onClick={() => handleShow(role)} title="Edit Role">
                                                 <FaEdit /> Edit
                                             </Button>
-                                            <Button variant="outline-danger" size="sm" onClick={() => handleShowDeleteRole(role)}>
+                                            <Button variant="outline-danger" size="sm" onClick={() => handleShowDeleteRole(role)} title="Delete Role">
                                                 <FaTrash /> Delete
                                             </Button>
                                         </div>

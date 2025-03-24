@@ -192,13 +192,13 @@ const Plans = () => {
                                     <td>{plan.message_limit}</td>
                                     <td>{planUserCount[plan.id] || 0}</td>
                                     <td>
-                                        <Button variant="outline-info" size="sm" onClick={() => handleShowViewPlan(plan)}>
+                                        <Button variant="outline-info" size="sm" onClick={() => handleShowViewPlan(plan)} title="View Details">
                                             <FaEye /> View
                                         </Button>
-                                        <Button variant="outline-primary" size="sm" onClick={() => handleShow(plan)}>
+                                        <Button variant="outline-primary" size="sm" onClick={() => handleShow(plan)} title="Edit Plan">
                                             <FaEdit /> Edit
                                         </Button>
-                                        <Button variant="outline-danger" size="sm" onClick={() => handleShowDeletePlan(plan)}>
+                                        <Button variant="outline-danger" size="sm" onClick={() => handleShowDeletePlan(plan)} title="Delete Plan">
                                             <FaTrash /> Delete
                                         </Button>
                                     </td>

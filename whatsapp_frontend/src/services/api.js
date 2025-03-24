@@ -292,7 +292,7 @@ export const createUser = async (userData) => {
         if (!token) throw new Error("No hay usuario autenticado.");
 
         const response = await api.post("users/", userData, {
-             headers: { Authorization: `Bearer ${token}` } 
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         return response.data;
@@ -303,17 +303,17 @@ export const createUser = async (userData) => {
 };
 
 // ✅ Editar un usuario
-export const updateUser = async(userId, userData) => {
-    try{
+export const updateUser = async (userId, userData) => {
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        const response = await api.put(`users/${userId}/`, userData, { 
-            headers: { Authorization: `Bearer ${token}` } 
+        const response = await api.put(`users/${userId}/`, userData, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al editar al usuario:", error.response?.data || error.message);
         throw error;
     }
@@ -412,7 +412,7 @@ export const deleteRole = async (roleId) => {
 
 // ✅ Obtener todos los planes
 export const getPlans = async () => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
@@ -423,14 +423,14 @@ export const getPlans = async () => {
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al obtener todos los planes", error.response?.data || error.message);
     }
 };
 
 // ✅ Crear un nuevo Plan
 export const createPlan = async (planData) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
@@ -441,7 +441,7 @@ export const createPlan = async (planData) => {
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al crear el plan", error.response?.data || error.message);
         throw error;
     }
@@ -449,7 +449,7 @@ export const createPlan = async (planData) => {
 
 // ✅ Actualizar un Plan existente
 export const updatePlan = async (planId, planData) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
@@ -460,7 +460,7 @@ export const updatePlan = async (planId, planData) => {
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al actualizar el plan", error.response?.data || error.message);
         throw error;
     }
@@ -468,18 +468,18 @@ export const updatePlan = async (planId, planData) => {
 
 // ✅ Eliminar un Plan
 export const deletePlan = async (planId) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        const response = await api.delete(`plans/${planId}/`,{
+        const response = await api.delete(`plans/${planId}/`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
         });
 
         return response.data;
-    } catch(error){
+    } catch (error) {
         console.error("Error al eliminar el plan", error.response?.data || error.message);
         throw error;
     }
@@ -492,8 +492,8 @@ export const getChatbots = async () => {
         if (!token) throw new Error("No hay usuario autenticado.");
 
         const response = await api.get("chatbots/", {
-            headers: { 
-                Authorization: `Bearer ${token}` 
+            headers: {
+                Authorization: `Bearer ${token}`
             },
         });
 
@@ -506,25 +506,25 @@ export const getChatbots = async () => {
 
 // ✅ Crear un Chatbot
 export const createChatbot = async (chatbotData) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        const response = await api.post("chatbots/", chatbotData,{
+        const response = await api.post("chatbots/", chatbotData, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al crear el chatbot", error.response?.data || error.message);
         throw error;
     }
 };
 // ✅ Actualizar un chatbot ya existente
 export const updateChatbot = async (chatbotId, chatbotData) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
@@ -535,7 +535,7 @@ export const updateChatbot = async (chatbotId, chatbotData) => {
         });
 
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error al actualizar el chatbot", error.response?.data || error.message);
         throw error;
     }
@@ -543,7 +543,7 @@ export const updateChatbot = async (chatbotId, chatbotData) => {
 
 // ✅ Eliminar un chatbot
 export const deleteChatbot = async (chatbotId) => {
-    try{
+    try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
@@ -552,7 +552,7 @@ export const deleteChatbot = async (chatbotId) => {
                 Authorization: `Bearer ${token}`
             },
         })
-    }catch(error){
+    } catch (error) {
         console.error("Error al eliminar el chatbot", error.response?.data || error.message);
         throw error;
     }
@@ -619,20 +619,74 @@ export const deleteWhatsAppAccount = async (accountId) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        await api.delete(`whatsapp-accounts/${accountId}/`, {
+        const response = await api.delete(`whatsapp-accounts/${accountId}/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+
+        return response.data;
     } catch (error) {
         console.error("Error al eliminar la cuenta de WhatsApp", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅
-// ✅
-// ✅
-// ✅
+// ✅ Obtener todos los mensajes
+export const getMessages = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.get("messages/", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener todos los mensajes", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Eliminar un mensaje
+export const deleteMessage = async (messageId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.delete(`messages/${messageId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar un mensaje", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Obtener todas las instances
+export const getIntances = async () => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.get("instances/", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch(error){
+        console.error("Error al obtener todas las instancias", error.response?.data || error.message);
+        throw error;
+    }
+};
 
 export default api;

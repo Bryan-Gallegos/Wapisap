@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DashboardLayout from "../layouts/Dashboard/DashboardLayout";
 import DashboardAdmin from "../pages/Dashboard/Admin/DashboardAdmin";
 import DashboardUser from "../pages/Dashboard/User/DashboardUser";
 import Login from "../pages/Login/Login";
@@ -11,6 +10,7 @@ import Roles from "../pages/Administration/Roles/Roles";
 import Plans from "../pages/Administration/Plans/Plans";
 import Chatbots from "../pages/Administration/ChatBots/ChatBots";
 import WhatsaapAccount from "../pages/Administration/WhatsappAccount/WhatsappAccount";
+import Messages from "../pages/Administration/Messages/Messages";
 
 const AppRouter = () => {
   return (
@@ -31,6 +31,9 @@ const AppRouter = () => {
       <Route path="/administration/plans" element={<Plans />} />
       <Route path="/administration/chatbots" element={<Chatbots />} />
       <Route path="/administration/whatsapp_accounts" element={<WhatsaapAccount />} />
+      <Route path="/administration/messages" element={<Messages />} />
+      {/*<Route path="/administration/permissions" element={<Permissions />} />
+      <Route path="/administration/api" element={<Api />} />*/}
       
     </Routes>
   );

@@ -117,9 +117,9 @@ const Chatbots = () => {
             const payload = {
                 name: values.name,
                 status: values.status,
-                whatsapp_id: values.whatsapp,  // 👈 este es el cambio clave
+                whatsapp_id: values.whatsapp,  
             };
-    
+
             if (selectedChatbot?.id) {
                 await updateChatbot(selectedChatbot.id, payload);
                 showNotification("Chatbot updated successfully.");
@@ -127,14 +127,14 @@ const Chatbots = () => {
                 await createChatbot(payload);
                 showNotification("Chatbot created successfully.");
             }
-    
+
             fetchChatbots();
             handleClose();
         } catch (error) {
             console.error("Error saving chatbot", error.response?.data || error.message);
             showNotification("Error saving chatbot. Please try again.");
         }
-    
+
         setSubmitting(false);
     };
 
@@ -187,15 +187,17 @@ const Chatbots = () => {
                                     </td>
                                     <td>{chatbot.status}</td>
                                     <td>
-                                        <Button variant="outline-info" size="sm" onClick={() => handleShowViewChatbot(chatbot)}>
-                                            <FaEye /> View
-                                        </Button>
-                                        <Button variant="outline-primary" size="sm" onClick={() => handleShow(chatbot)}>
-                                            <FaEdit /> Edit
-                                        </Button>
-                                        <Button variant="outline-danger" size="sm" onClick={() => handleShowDeleteChatbot(chatbot)}>
-                                            <FaTrash /> Delete
-                                        </Button>
+                                        <div className="action-buttons">
+                                            <Button variant="outline-info" size="sm" onClick={() => handleShowViewChatbot(chatbot)} title="View Details">
+                                                <FaEye /> View
+                                            </Button>
+                                            <Button variant="outline-primary" size="sm" onClick={() => handleShow(chatbot)} title="Edit Chatbot">
+                                                <FaEdit /> Edit
+                                            </Button>
+                                            <Button variant="outline-danger" size="sm" onClick={() => handleShowDeleteChatbot(chatbot)} title="Delete Chatbot">
+                                                <FaTrash /> Delete
+                                            </Button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
