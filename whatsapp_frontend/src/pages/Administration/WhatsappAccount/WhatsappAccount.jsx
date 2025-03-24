@@ -178,7 +178,7 @@ const WhatsaapAccount = () => {
                                     <td>{account.id}</td>
                                     <td>{account.phone_number}</td>
                                     <td>{account.status}</td>
-                                    <td>{account.user}</td>
+                                    <td>{getUserFullName(account.user)}</td>
                                     <td>
                                         <Button size="sm" variant="info" onClick={() => handleShowViewModal(account)}>
                                             <FaEye />

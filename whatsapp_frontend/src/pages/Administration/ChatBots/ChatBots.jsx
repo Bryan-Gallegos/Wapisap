@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getChatbots, createChatbot, updateChatbot, deleteChatbot, getUsers } from "../../../services/api";
+import { getChatbots, createChatbot, updateChatbot, deleteChatbot, getUsers, getWhatsAppAccounts } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { FaPlus, FaEdit, FaTrash, FaEye, FaRobot } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -12,6 +12,7 @@ import "./Chatbots.css";
 const Chatbots = () => {
     const [chatbots, setChatbots] = useState([]);
     const [users, setUsers] = useState([]);
+    const [whatsappAccounts, setWhatsappAccounts] = useState([]);
     const [search, setSearch] = useState("");
     const [show, setShow] = useState(false);
     const [selectedChatbot, setSelectedChatbot] = useState(null);
@@ -27,6 +28,7 @@ const Chatbots = () => {
     useEffect(() => {
         fetchChatbots();
         fetchUsers();
+        fetchWhatsappAccounts();
     }, []);
 
     const fetchChatbots = async () => {
@@ -44,6 +46,15 @@ const Chatbots = () => {
             setUsers(response.results);
         } catch (error) {
             console.error("Error obtaining users", error);
+        }
+    };
+
+    const fetchWhatsappAccounts = async () => {
+        try {
+            const response = await getWhatsAppAccounts();
+            setWhatsappAccounts(response.results);
+        } catch (error) {
+            console.error("Error fetching WhatsApp accounts", error);
         }
     };
 
@@ -98,26 +109,32 @@ const Chatbots = () => {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("The name of chatbot is mandatory"),
         status: Yup.string().required("Status is required"),
-        whatsapp: Yup.number().required("WhatsApp ID is required"),
+        whatsapp: Yup.number().typeError("You must select a WhatsApp Account").required("WhatsApp ID is required"),
     });
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
+            const payload = {
+                name: values.name,
+                status: values.status,
+                whatsapp_id: values.whatsapp,  // 👈 este es el cambio clave
+            };
+    
             if (selectedChatbot?.id) {
-                await updateChatbot(selectedChatbot.id, values);
+                await updateChatbot(selectedChatbot.id, payload);
                 showNotification("Chatbot updated successfully.");
             } else {
-                await createChatbot(values);
+                await createChatbot(payload);
                 showNotification("Chatbot created successfully.");
             }
-
+    
             fetchChatbots();
             handleClose();
         } catch (error) {
             console.error("Error saving chatbot", error.response?.data || error.message);
             showNotification("Error saving chatbot. Please try again.");
         }
-
+    
         setSubmitting(false);
     };
 
@@ -155,7 +172,7 @@ const Chatbots = () => {
                             <tr>
                                 <th>ID</th>
                                 <th>Chatbot Name</th>
-                                <th>Description</th>
+                                <th>WhatsApp Account</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -165,7 +182,9 @@ const Chatbots = () => {
                                 <tr key={chatbot.id}>
                                     <td>{chatbot.id}</td>
                                     <td>{chatbot.name}</td>
-                                    <td>{chatbot.description}</td>
+                                    <td>
+                                        {chatbot.whatsapp.name}:  {chatbot.whatsapp.phone_number}
+                                    </td>
                                     <td>{chatbot.status}</td>
                                     <td>
                                         <Button variant="outline-info" size="sm" onClick={() => handleShowViewChatbot(chatbot)}>
@@ -207,24 +226,13 @@ const Chatbots = () => {
                         <div>
                             <p><strong>ID:</strong> {selectedChatbotDetails.id}</p>
                             <p><strong>Name:</strong> {selectedChatbotDetails.name}</p>
-                            <p><strong>Description:</strong> {selectedChatbotDetails.description}</p>
                             <p><strong>Status:</strong> {selectedChatbotDetails.status}</p>
-
-                            {/* Aquí podríamos incluir una lista de usuarios si aplica */}
-                            {selectedChatbotDetails.users && selectedChatbotDetails.users.length > 0 ? (
-                                <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
-                                    <h5>Users interacting with this chatbot:</h5>
-                                    <ul style={{ listStyle: "none", padding: 0 }}>
-                                        {selectedChatbotDetails.users.map(user => (
-                                            <li key={user.id} style={{ padding: "5px 0", borderBottom: "1px solid #eee" }}>
-                                                {user.first_name} {user.last_name} ({user.email})
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ) : (
-                                <p>No users assigned to this chatbot.</p>
-                            )}
+                            <p>
+                                <strong>WhatsApp Account:</strong>{" "}
+                                {selectedChatbotDetails.whatsapp
+                                    ? `${selectedChatbotDetails.whatsapp.name || "Unnamed"} - ${selectedChatbotDetails.whatsapp.phone_number || "N/A"}`
+                                    : "Unnamed - N/A"}
+                            </p>
                         </div>
                     )}
                 </Modal.Body>
@@ -244,7 +252,7 @@ const Chatbots = () => {
                         initialValues={{
                             name: selectedChatbot?.name || "",
                             status: selectedChatbot?.status || "active",
-                            whatsapp: selectedChatbot?.whatsapp || 1,
+                            whatsapp: selectedChatbot?.whatsapp.id || "",
                         }}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
@@ -265,14 +273,17 @@ const Chatbots = () => {
                                     </Form.Control>
                                 </Form.Group>
 
-                                <Form.Group className="mb-3">
-                                    <Form.Label>WhatsApp ID</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="whatsapp"
-                                        value={values.whatsapp}
-                                        onChange={handleChange}
-                                    />
+                                <Form.Group>
+                                    <Form.Label>WhatsApp Account</Form.Label>
+                                    <Form.Control as="select" name="whatsapp" value={values.whatsapp} onChange={handleChange}>
+
+                                        <option value="">-- Select WhatsApp Account --</option>
+                                        {whatsappAccounts.map(account => (
+                                            <option key={account.id} value={account.id}>
+                                                {account.name || "Unnamed"} - {account.phone_number}
+                                            </option>
+                                        ))}
+                                    </Form.Control>
                                 </Form.Group>
 
                                 <Modal.Footer className="d-flex justify-content-end">

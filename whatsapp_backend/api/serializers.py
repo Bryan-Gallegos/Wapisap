@@ -100,7 +100,7 @@ class PlanSerializer(serializers.ModelSerializer):
 class WhatsAppAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhatsAppAccount
-        fields = '__all__'
+        fields = ['id', 'name', 'phone_number', 'status', 'user']
 
 # Serializador para Instancias de WhatsApp
 class InstanceSerializer(serializers.ModelSerializer):
@@ -110,9 +110,14 @@ class InstanceSerializer(serializers.ModelSerializer):
 
 # Serializador para Chatbots
 class ChatbotSerializer(serializers.ModelSerializer):
+    whatsapp = WhatsAppAccountSerializer(read_only=True)
+    whatsapp_id = serializers.PrimaryKeyRelatedField(
+        queryset=WhatsAppAccount.objects.all(), write_only=True, source='whatsapp'
+    )
+
     class Meta:
         model = Chatbot
-        fields = '__all__'
+        fields = ['id', 'name', 'status', 'whatsapp', 'whatsapp_id']
 
 # Serializador para Configuración de Chatbots
 class ChatbotSettingsSerializer(serializers.ModelSerializer):
