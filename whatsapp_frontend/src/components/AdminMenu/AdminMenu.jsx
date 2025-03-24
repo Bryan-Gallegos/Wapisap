@@ -14,7 +14,7 @@ const menuItems = [
     { icon: <FaDatabase className="icon plans-icon" />, title: "Plans", desc: "Manage subscription plans", link: "/administration/plans" },
     { icon: <FaUserShield className="icon roles-icon" />, title: "Roles", desc: "Manage user roles", link: "/administration/roles" },
     { icon: <FaUsers className="icon users-icon" />, title: "Users", desc: "View and manage users", link: "/administration/users" },
-    { icon: <FaCogs className="icon whatsapp-icon" />, title: "WhatsApp Accounts", desc: "Manage linked accounts", link: "/administration/whatsapp-accounts" },
+    { icon: <FaCogs className="icon whatsapp-icon" />, title: "WhatsApp Accounts", desc: "Manage linked accounts", link: "/administration/whatsapp_accounts" },
 ];
 
 const AdminMenu = () => {

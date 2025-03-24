@@ -559,8 +559,80 @@ export const deleteChatbot = async (chatbotId) => {
 };
 
 // ✅ Obtener todos los Whatsapp Accounts
+export const getWhatsAppAccounts = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.get("whatsapp-accounts/", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener las cuentas de WhatsApp", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // ✅ Crear un Whatsapp Account
+export const createWhatsAppAccount = async (accountData) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.post("whatsapp-accounts/", accountData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al crear la cuenta de WhatsApp", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // ✅ Actualizar un Whatsapp Account ya existente
+export const updateWhatsAppAccount = async (accountId, accountData) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.put(`whatsapp-accounts/${accountId}/`, accountData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al actualizar la cuenta de WhatsApp", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // ✅ Eliminar un Whatsapp Accounts
+export const deleteWhatsAppAccount = async (accountId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        await api.delete(`whatsapp-accounts/${accountId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    } catch (error) {
+        console.error("Error al eliminar la cuenta de WhatsApp", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅
+// ✅
+// ✅
+// ✅
 
 export default api;

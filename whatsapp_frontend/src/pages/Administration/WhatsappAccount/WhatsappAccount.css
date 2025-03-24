@@ -1,0 +1,123 @@
+/* Estructura principal */
+.whatsapp-accounts-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Contenedor principal */
+.admin-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    overflow-x: hidden;
+    padding: 20px;
+    background: #f8f9fa;
+    /* Fondo más claro */
+    border-radius: 8px;
+}
+
+/* Paginación */
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Botones de acciones */
+.action-buttons button {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+/* Animación en botones */
+button {
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Mejoras en la tabla */
+.table th {
+    text-align: center;
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+}
+
+.table td {
+    text-align: center;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+/* ========================= */
+/* 🎨 Estilos para el Modal */
+/* ========================= */
+
+.modal-form {
+    padding: 10px;
+}
+
+/* Ajustes en inputs */
+.modal-form input,
+.modal-form select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* Botones en el modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.modal-buttons button {
+    width: 48%;
+}
+
+/* ============================= */
+/* 📱 Estilos Responsivos */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    /* Hacer el modal más ancho en pantallas pequeñas */
+    .modal-dialog {
+        max-width: 95%;
+    }
+
+    /* Ajustar márgenes internos */
+    .modal-body {
+        padding: 15px;
+    }
+
+    /* Campos en una sola columna en móviles */
+    .modal-form .row {
+        flex-direction: column;
+    }
+
+    .modal-form .col-md-6 {
+        width: 100%;
+    }
+
+    /* Botones en columna */
+    .modal-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .modal-buttons button {
+        width: 100%;
+    }
+}

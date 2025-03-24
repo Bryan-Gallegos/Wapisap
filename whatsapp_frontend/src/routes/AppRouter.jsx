@@ -10,6 +10,7 @@ import Users from "../pages/Administration/Users/Users";
 import Roles from "../pages/Administration/Roles/Roles";
 import Plans from "../pages/Administration/Plans/Plans";
 import Chatbots from "../pages/Administration/ChatBots/ChatBots";
+import WhatsaapAccount from "../pages/Administration/WhatsappAccount/WhatsappAccount";
 
 const AppRouter = () => {
   return (
@@ -29,6 +30,7 @@ const AppRouter = () => {
       <Route path="/administration/roles" element={<Roles />} />
       <Route path="/administration/plans" element={<Plans />} />
       <Route path="/administration/chatbots" element={<Chatbots />} />
+      <Route path="/administration/whatsapp_accounts" element={<WhatsaapAccount />} />
       
     </Routes>
   );

@@ -4,21 +4,21 @@ from .models import *
 
 @receiver(post_delete, sender=WhatsAppAccount)
 def delete_related_data(sender, instance, **kwargs):
-    """
-    Cuando se elimina una cuenta de WhatsApp, también se eliminan todas sus instancias, chatbots, items y mensajes relacionados.
-    """
-    print(f"⚠ Eliminando datos relacionados a la cuenta de WhatsApp ID {instance.id}")
+    try:
+        print(f"⚠ Eliminando datos relacionados a la cuenta de WhatsApp ID {instance.id}")
 
-    # Eliminar instancias relacionadas a este número de WhatsApp
-    Instance.objects.filter(whatsapp_account=instance).delete()
-    
-    # Eliminar chatbots relacionados a este número
-    Chatbot.objects.filter(whatsapp_account=instance).delete()
-    
-    # Eliminar ítems de chatbot relacionados
-    ChatbotItem.objects.filter(chatbot__whatsapp_account=instance).delete()
-    
-    # Eliminar mensajes relacionados
-    Message.objects.filter(whatsapp_account=instance).delete()
+        # Usar el campo correcto: whatsapp
+        related_chatbots = Chatbot.objects.filter(whatsapp=instance)
 
-    print("✅ Todos los datos relacionados han sido eliminados correctamente.")
+        if related_chatbots.exists():
+            ChatbotItem.objects.filter(chatbot__in=related_chatbots).delete()
+            related_chatbots.delete()
+
+        Instance.objects.filter(whatsapp=instance).delete()
+        Message.objects.filter(whatsapp=instance).delete()
+
+        print("✅ Todos los datos relacionados han sido eliminados correctamente.")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"❌ Error al eliminar datos relacionados: {e}")
