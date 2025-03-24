@@ -39,10 +39,10 @@ const Chatbots = () => {
     };
 
     const fetchUsers = async () => {
-        try{
+        try {
             const response = await getUsers();
             setUsers(response.results);
-        }catch(error){
+        } catch (error) {
             console.error("Error obtaining users", error);
         }
     };
@@ -97,8 +97,8 @@ const Chatbots = () => {
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("The name of chatbot is mandatory"),
-        description: Yup.string().required("Description is required"),
         status: Yup.string().required("Status is required"),
+        whatsapp: Yup.number().required("WhatsApp ID is required"),
     });
 
     const handleSubmit = async (values, { setSubmitting }) => {
@@ -243,12 +243,13 @@ const Chatbots = () => {
                         enableReinitialize
                         initialValues={{
                             name: selectedChatbot?.name || "",
-                            description: selectedChatbot?.description || "",
                             status: selectedChatbot?.status || "active",
+                            whatsapp: selectedChatbot?.whatsapp || 1,
                         }}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
+
                         {({ values, handleChange, handleSubmit }) => (
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
@@ -257,16 +258,21 @@ const Chatbots = () => {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control as="textarea" name="description" value={values.description} onChange={handleChange} />
-                                </Form.Group>
-
-                                <Form.Group className="mb-3">
                                     <Form.Label>Status</Form.Label>
                                     <Form.Control as="select" name="status" value={values.status} onChange={handleChange}>
                                         <option value="active">Active</option>
                                         <option value="inactive">Inactive</option>
                                     </Form.Control>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label>WhatsApp ID</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        name="whatsapp"
+                                        value={values.whatsapp}
+                                        onChange={handleChange}
+                                    />
                                 </Form.Group>
 
                                 <Modal.Footer className="d-flex justify-content-end">
