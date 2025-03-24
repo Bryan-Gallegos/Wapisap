@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getChatbots, createChatbot, updateChatbot, deleteChatbot } from "../../../services/api";
+import { getChatbots, createChatbot, updateChatbot, deleteChatbot, getUsers } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { FaPlus, FaEdit, FaTrash, FaEye, FaRobot } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -10,7 +10,8 @@ import * as Yup from "yup";
 import "./Chatbots.css";
 
 const Chatbots = () => {
-    const [chatbots, setChatbots] = useState([])
+    const [chatbots, setChatbots] = useState([]);
+    const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [show, setShow] = useState(false);
     const [selectedChatbot, setSelectedChatbot] = useState(null);
@@ -34,6 +35,15 @@ const Chatbots = () => {
             setChatbots(response.results);
         } catch (error) {
             console.error("Error obtaining chatbots", error);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try{
+            const response = await getUsers();
+            setUsers(response.results);
+        }catch(error){
+            console.error("Error obtaining users", error);
         }
     };
 
