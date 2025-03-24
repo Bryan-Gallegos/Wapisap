@@ -492,7 +492,9 @@ export const getChatbots = async () => {
         if (!token) throw new Error("No hay usuario autenticado.");
 
         const response = await api.get("chatbots/", {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { 
+                Authorization: `Bearer ${token}` 
+            },
         });
 
         return response.data;
@@ -503,10 +505,62 @@ export const getChatbots = async () => {
 };
 
 // ✅ Crear un Chatbot
+export const createChatbot = async (chatbotData) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
 
+        const response = await api.post("chatbots/", chatbotData,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error al crear el chatbot", error.response?.data || error.message);
+        throw error;
+    }
+};
 // ✅ Actualizar un chatbot ya existente
+export const updateChatbot = async (chatbotId, chatbotData) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.put(`chatbots/${chatbotId}/`, chatbotData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error al actualizar el chatbot", error.response?.data || error.message);
+        throw error;
+    }
+};
 
 // ✅ Eliminar un chatbot
+export const deleteChatbot = async (chatbotId) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
 
+        const response = await api.delete(`chatbots/${chatbotId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        })
+    }catch(error){
+        console.error("Error al eliminar el chatbot", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Obtener todos los Whatsapp Accounts
+// ✅ Crear un Whatsapp Account
+// ✅ Actualizar un Whatsapp Account ya existente
+// ✅ Eliminar un Whatsapp Accounts
 
 export default api;

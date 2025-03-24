@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getChatbots, createChatbot, updateChatbot, deleteCatbot } from "../../../services/api";
+import { getChatbots, createChatbot, updateChatbot, deleteChatbot } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { FaPlus, FaEdit, FaTrash, FaEye, FaRobot } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
