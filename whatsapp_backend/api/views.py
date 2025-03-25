@@ -169,3 +169,16 @@ class BillingRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Billing.objects.all()
     serializer_class = BillingSerializer
     permission_classes = [IsAuthenticated]
+
+# ===============================
+# PERMISSIONS
+# ===============================
+class PermissionListCreateView(generics.ListCreateAPIView):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAdminUser]
+
+class PermissionRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAdminUser]

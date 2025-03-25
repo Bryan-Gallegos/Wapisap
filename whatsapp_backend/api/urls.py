@@ -72,5 +72,9 @@ urlpatterns = [
     # Billing
     path('billing/', BillingListCreateView.as_view(), name='billing-list'),
     path('billing/<int:pk>/', BillingRetrieveUpdateDeleteView.as_view(), name='billing-detail'),
+
+    #Permission
+    path('permissions/',PermissionListCreateView.as_view(), name='permissions-list'),
+    path('permissions/<int:pk>/', PermissionRetrieveUpdateDeleteView.as_view(), name='permissions-detail'),
     
 ]

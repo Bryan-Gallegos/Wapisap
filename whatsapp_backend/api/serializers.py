@@ -172,8 +172,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         else:
             raise serializers.ValidationError("Credenciales incorrectas")
 
-# Serializadoe de Billing
+# Serializador de Billing
 class BillingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Billing
         fields = '__all__'
+
+#Serializador de Permission
+class PermissionSerializer(serializers.ModelSerializer):
+    role_name = serializers.CharField(source='role.name', read_only=True)
+
+    class Meta:
+        model = Permission
+        fields = ['id', 'role', 'role_name', 'permission']
