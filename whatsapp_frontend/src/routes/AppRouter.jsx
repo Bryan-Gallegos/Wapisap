@@ -11,6 +11,7 @@ import Plans from "../pages/Administration/Plans/Plans";
 import Chatbots from "../pages/Administration/ChatBots/ChatBots";
 import WhatsaapAccount from "../pages/Administration/WhatsappAccount/WhatsappAccount";
 import Messages from "../pages/Administration/Messages/Messages";
+import Permissions from "../pages/Administration/Permissions/Permissions";
 
 const AppRouter = () => {
   return (
@@ -32,8 +33,8 @@ const AppRouter = () => {
       <Route path="/administration/chatbots" element={<Chatbots />} />
       <Route path="/administration/whatsapp_accounts" element={<WhatsaapAccount />} />
       <Route path="/administration/messages" element={<Messages />} />
-      {/*<Route path="/administration/permissions" element={<Permissions />} />
-      <Route path="/administration/api" element={<Api />} />*/}
+      <Route path="/administration/permissions" element={<Permissions />} />
+      {/*<Route path="/administration/api" element={<Api />} />*/}
       
     </Routes>
   );

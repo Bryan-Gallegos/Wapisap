@@ -77,4 +77,11 @@ urlpatterns = [
     path('permissions/',PermissionListCreateView.as_view(), name='permissions-list'),
     path('permissions/<int:pk>/', PermissionRetrieveUpdateDeleteView.as_view(), name='permissions-detail'),
     
+    #PlanPermission
+    path('plan-permissions/', PlanPermissionListCreateView.as_view(), name='plan-permissions-list'),
+    path('plan-permissions/<int:pk>/', PlanPermissionRetrieveUpdateDeleteView.as_view(), name='plan-permissions-details'),
+
+    #Perssion specific
+    path('plans/<int:plan_id>/permissions/', PermissionsByPlanView.as_view(), name='permissions-by-plan'),
+
 ]

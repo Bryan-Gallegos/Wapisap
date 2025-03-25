@@ -65,7 +65,7 @@ class User(AbstractUser):
 
 
 # ==========================
-# MODELO DE ROLES Y PERMISOS
+# MODELO DE ROLES
 # ==========================
 class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -73,13 +73,16 @@ class Role(models.Model):
     def __str__(self):
         return self.name
     
+# ==========================
+# MODELO DE Permission
+# ==========================
 class Permission(models.Model):
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
-    permission = models.CharField(max_length=255)
+    name = models.CharField(max_length=100, default="default_permission")
 
     def __str__(self):
-        return f"{self.role.name} - {self.permission}"
-    
+        return self.name
+
+
 # ==========================
 # MODELO DE PLANES DE SUSCRIPCIÓN
 # ==========================
@@ -94,6 +97,20 @@ class Plan(models.Model):
 
     def __str__(self):
         return f"{self.name} (Messages: {self.message_limit})"
+
+# ==========================
+# MODELO DE RELACION PLAN-PERMISO
+# ==========================
+class PlanPermission(models.Model):
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('plan', 'permission')
+
+    def __str__(self):
+        return f"{self.plan.name} - {self.permission.name}"
+
     
 # ==========================
 # MODELO DE CUENTAS DE WHATSAPP

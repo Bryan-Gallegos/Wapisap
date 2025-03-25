@@ -689,4 +689,102 @@ export const getIntances = async () => {
     }
 };
 
+// ✅ Obtener todos los permisos asignados a planes (PlanPermission)
+export const getPermissions = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.get("plan-permissions/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener todos los permisos por plan", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Crear un permiso asignado a un plan (requiere que el permiso ya exista)
+export const createPermission = async (data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.post("plan-permissions/", data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al crear la relación plan-permiso", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Eliminar una relación Plan-Permission
+export const deletePermission = async (permissionId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.delete(`plan-permissions/${permissionId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar el permiso del plan", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// 🟡 Opcional: si quieres editar la relación (poco común)
+export const updatePermission = async (permissionId, data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.put(`plan-permissions/${permissionId}/`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al actualizar la relación plan-permiso", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Crear un nuevo permiso (sin plan todavía)
+export const createNewPermission = async (data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No hay usuario autenticado.");
+
+        const response = await api.post("permissions/", data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error al crear un nuevo permiso", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
+
+
 export default api;

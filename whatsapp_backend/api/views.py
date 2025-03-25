@@ -182,3 +182,29 @@ class PermissionRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
     permission_classes = [IsAdminUser]
+
+# ===============================
+# PLANES Y SUS PERMISSIONS
+# ===============================
+class PlanPermissionListCreateView(generics.ListCreateAPIView):
+    queryset = PlanPermission.objects.all()
+    serializer_class = PlanPermissionSerializer
+    permission_classes = [IsAdminUser]
+
+class PlanPermissionRetrieveUpdateDeleteView(generics.DestroyAPIView):
+    queryset = PlanPermission.objects.all()
+    serializer_class = PlanPermissionSerializer
+    permission_classes = [IsAdminUser]
+
+# ===============================
+# PERMISOS DE UN PLAN ESPECIFICO
+# ===============================
+from rest_framework.views import APIView
+
+class PermissionsByPlanView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, plan_id):
+        permissions = PlanPermission.objects.filter(plan_id=plan_id)
+        serializer = PlanPermissionSerializer(permissions, many=True)
+        return Response(serializer.data)

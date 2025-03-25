@@ -180,8 +180,14 @@ class BillingSerializer(serializers.ModelSerializer):
 
 #Serializador de Permission
 class PermissionSerializer(serializers.ModelSerializer):
-    role_name = serializers.CharField(source='role.name', read_only=True)
-
     class Meta:
         model = Permission
-        fields = ['id', 'role', 'role_name', 'permission']
+        fields = ['id', 'name']
+
+class PlanPermissionSerializer(serializers.ModelSerializer):
+    permission = PermissionSerializer(read_only=True)
+    permission_id = serializers.PrimaryKeyRelatedField(queryset=Permission.objects.all(), source='permission', write_only=True)
+    
+    class Meta:
+        model = PlanPermission
+        fields = ['id', 'plan', 'permission', 'permission_id']

@@ -10,25 +10,25 @@ import { FaPlus, FaUsers } from "react-icons/fa";
 import "./Users.css";
 
 const Users = () => {
-  const [users, setUsers] = useState([]); // USERS BY API
-  const [roles, setRoles] = useState({}); //ROLES BY API
-  const [rolesList, setRolesList] = useState([]); //ROLELIST BY API
-  const [plans, setPlans] = useState({}); //PLANS BY API
-  const [search, setSearch] = useState(""); //SEARCH USER
-  const [show, setShow] = useState(false); //SHOW MODAL CREATE/EDIT USER
-  const [selectedUser, setSelectedUser] = useState(null); //USER SELECTED
-  const [currentPage, setCurrentPage] = useState(1); //CURRENT PAGE OF PAGINATION
-  const [showUserDetails, setShowUserDetails] = useState(false); //VARIABLE FOR VIEW USER
-  const [selectedUserDetails, setSelectedUserDetails] = useState(null); //VARIABLE FOR USER SELECTED FOR VIEW USER
-  const [showEditExpireDate, setShowEditExpireDate] = useState(false); //VARIABLE FOR EDIT EXPIRE DATE
-  const [selectedUserExpireDate, setSelectedUserExpireDate] = useState(null); //VARIABLE FOR USER SELECTED FOR EDIT EXPIRE DATE
-  const [showDeleteModal, setShowDeleteModal] = useState(false); //SHOW MODAL DELETE USER
-  const [userToDelete, setUserToDelete] = useState(null); //VARIABLE USER FOR DELETED
-  const [showNotificationModal, setShowNotificationModal] = useState(false); //SHOW MODAL NOTIFICATION
-  const [notificationMessage, setNotificationMessage] = useState(""); //MESSAGE FOR NOTIFICATION
-  const [showEditPlan, setShowEditPlan] = useState(false); //SHOW MODAL EDIT PLAN
-  const [selectedUserPlan, setSelectedUserPlan] = useState(null); //VARIABLE FOR USER SELECTED FOR EDIT PLAN
-  const usersPerPage = 5; // Pagination size
+  const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState({});
+  const [rolesList, setRolesList] = useState([]);
+  const [plans, setPlans] = useState({});
+  const [search, setSearch] = useState("");
+  const [show, setShow] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const [showEditExpireDate, setShowEditExpireDate] = useState(false);
+  const [selectedUserExpireDate, setSelectedUserExpireDate] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [showEditPlan, setShowEditPlan] = useState(false);
+  const [selectedUserPlan, setSelectedUserPlan] = useState(null);
+  const usersPerPage = 5;
 
   useEffect(() => {
     fetchUsers();
@@ -37,22 +37,20 @@ const Users = () => {
     fetchRolesList();
   }, []);
 
-  //Function to obtain all users
   const fetchUsers = async () => {
     try {
-      const response = await getUsers(); // Gets all users without paging
-      setUsers(response.results || response);
+      const response = await getUsers();
+      setUsers(response || []);
     } catch (error) {
       console.error("Error getting users", error);
     }
   };
 
-  //Function to get all roles (only the name)
   const fetchRoles = async () => {
     try {
-      const response = await getRoles(); // Call the role API
+      const response = await getRoles();
       const rolesMap = {};
-      response.results.forEach(role => {
+      (response || []).forEach(role => {
         rolesMap[role.id] = role.name;
       });
       setRoles(rolesMap);
@@ -61,13 +59,12 @@ const Users = () => {
     }
   };
 
-  //Function to obtain all plans
   const fetchPlans = async () => {
     try {
-      const response = await getPlans(); // Calling the Plans API
+      const response = await getPlans();
       const plansMap = {};
-      response.results.forEach(plan => {
-        plansMap[plan.id] = plan.name; // Map ID -> Name
+      (response || []).forEach(plan => {
+        plansMap[plan.id] = plan.name;
       });
       setPlans(plansMap);
     } catch (error) {
@@ -75,34 +72,30 @@ const Users = () => {
     }
   };
 
-  //Function to obtain the list of roles
   const fetchRolesList = async () => {
     try {
       const response = await getRoles();
-      if (response && Array.isArray(response.results)) { // We check if it is an array
-        setRolesList(response.results);
+      if (response && Array.isArray(response)) {
+        setRolesList(response);
       } else {
-        setRolesList([]); // Evitamos que sea undefined
+        setRolesList([]);
       }
     } catch (error) {
-      console.error("Error obtaining the list of roles", error);
-      setRolesList([]); // In case of error, we keep an empty array
+      console.error("Error getting roles list", error);
+      setRolesList([]);
     }
   };
 
-  // Handle to display the Add/Edit modal
   const handleShow = (user) => {
     setSelectedUser(user);
     setShow(true);
   };
 
-  // Handle to close the Add/Edit modal
   const handleClose = () => {
     setSelectedUser(null);
     setShow(false);
   };
 
-  // Handles for View Details Modal
   const handleShowUserDetails = (user) => {
     setSelectedUserDetails(user);
     setShowUserDetails(true);
@@ -113,7 +106,6 @@ const Users = () => {
     setShowUserDetails(false);
   };
 
-  // Handles for the Edit Expire Date Modal
   const handleShowEditExpireDate = (user) => {
     setSelectedUserExpireDate(user);
     setShowEditExpireDate(true);
@@ -124,25 +116,22 @@ const Users = () => {
     setShowEditExpireDate(false);
   };
 
-  // Function to change the expire_date
   const handleUpdateExpireDate = async (values, { setSubmitting }) => {
     try {
-      // Only send the fields that actually change
       const updatedUser = {
-        expire_date: values.expire_date  // We only send expire_date
+        expire_date: values.expire_date
       };
 
       await updateUser(selectedUserExpireDate.id, updatedUser);
-      showNotification("Expiration date correctly updated.");
-      fetchUsers();  // Reload users
-      handleCloseEditExpireDate();  // Close modal
+      showNotification("Expiration date updated successfully.");
+      fetchUsers();
+      handleCloseEditExpireDate();
     } catch (error) {
-      showNotification("Error updating the expiration date.");
+      showNotification("Error updating expiration date.");
     }
     setSubmitting(false);
   };
 
-  // Handles to delete a user
   const handleShowDeleteUser = (user) => {
     setUserToDelete(user);
     setShowDeleteModal(true);
@@ -151,29 +140,26 @@ const Users = () => {
   const handleCloseDeleteUser = () => {
     setUserToDelete(null);
     setShowDeleteModal(false);
-  }
+  };
 
-  // Delete a user function
   const handleDeleteUser = async () => {
     if (userToDelete) {
       try {
         await deleteUser(userToDelete.id);
-        showNotification("User successfully deleted.");
+        showNotification("User deleted successfully.");
         fetchUsers();
         handleCloseDeleteUser();
       } catch (error) {
-        showNotification("Error deleting user. Please try again.");
+        showNotification("Error deleting user.");
       }
     }
   };
 
-  // Function for displaying notification (accepted or rejected)
   const showNotification = (message) => {
     setNotificationMessage(message);
     setShowNotificationModal(true);
   };
 
-  // Handles to edit plan
   const handleShowEditPlan = (user) => {
     setSelectedUserPlan(user);
     setShowEditPlan(true);
@@ -184,7 +170,6 @@ const Users = () => {
     setShowEditPlan(false);
   };
 
-  // Function for change the plan of user
   const handleUpdatePlan = async (values, { setSubmitting }) => {
     try {
       const updatedUser = { plan: values.plan };
@@ -194,27 +179,24 @@ const Users = () => {
       fetchUsers();
       handleCloseEditPlan();
     } catch (error) {
-      showNotificationModal("Error updating plan.");
+      showNotification("Error updating plan.");
     }
 
     setSubmitting(false);
   };
 
-  // Validation with Yup
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("The username is required"),
     first_name: Yup.string().required("The name is required"),
-    last_name: Yup.string().required("The last_name is required"),
-    email: Yup.string().email("Invalid Email").required("The email is required"),
-    password: Yup.string()
-      .when("isNewUser", {
-        is: true,
-        then: (schema) => schema.required("The password is required")
-      }),
+    last_name: Yup.string().required("The last name is required"),
+    email: Yup.string().email("Invalid email").required("The email is required"),
+    password: Yup.string().when("isNewUser", {
+      is: true,
+      then: (schema) => schema.required("The password is required")
+    }),
     role: Yup.string().required("The role is required"),
   });
 
-  // Function for sending data
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const userData = {
@@ -227,30 +209,27 @@ const Users = () => {
         expire_date: values.expire_date || null,
       };
 
-      // If the user has entered a password, we send it to
       if (values.password) {
         userData.password = values.password;
       }
 
       if (selectedUser) {
         await updateUser(selectedUser.id, userData);
-        showNotification("User updated correctly.");
+        showNotification("User updated successfully.");
       } else {
         await createUser(userData);
-        showNotification("User created correctly.");
+        showNotification("User created successfully.");
       }
 
       fetchUsers();
       handleClose();
     } catch (error) {
       console.error("Error saving user", error);
-      showNotification("Error saving user. Please try again.");
+      showNotification("Error saving user.");
     }
     setSubmitting(false);
   };
 
-
-  // Pagination
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
