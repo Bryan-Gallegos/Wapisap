@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getMessages, deleteMessage, getIntances, getWhatsAppAccounts } from "../../../services/api";
+import { getMessages, deleteMessage, getInstances, getWhatsAppAccounts } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination, Tab } from "react-bootstrap";
 import { FaComments, FaEye, FaTrash } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -39,7 +39,7 @@ const Messages = () => {
 
     const fetchIntances = async () => {
         try {
-            const response = await getIntances();
+            const response = await getInstances();
             setInstances(response.results || response);
         } catch (error) {
             console.error("Error getting instances", error);

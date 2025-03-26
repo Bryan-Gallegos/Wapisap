@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { getTotalUsers, getTotalPlans, getTotalWhatsAppAccounts, getTotalChatbots, getRecentUsers, getRecentInstances, getWhatsAppAccounts } from "../../services/api";
+import { Container, Row, Col, Card, Table } from "react-bootstrap";
+import { FaUsers, FaCogs, FaRobot, FaWhatsapp } from "react-icons/fa";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Topbar from "../../components/Topbar/Topbar";
 import AdminMenu from "../../components/AdminMenu/AdminMenu";
-import {
-    getTotalUsers,
-    getTotalPlans,
-    getTotalWhatsAppAccounts,
-    getTotalChatbots,
-    getRecentInvoices,
-    getRecentUsers,
-} from "../../services/api";
-import { Container, Row, Col, Card, Table } from "react-bootstrap";
-import { FaUsers, FaCogs, FaRobot, FaWhatsapp } from "react-icons/fa";
 import CountUp from "react-countup";
 import "./Administration.css";  // Archivo de estilos
 
@@ -19,9 +12,10 @@ const Administration = () => {
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalPlans, setTotalPlans] = useState(0);
     const [totalWhatsAppAccounts, setTotalWhatsAppAccounts] = useState(0);
+    const [whatsappAccounts, setWhatsappAccounts] = useState([]);
     const [totalChatbots, setTotalChatbots] = useState(0);
-    const [recentInvoices, setRecentInvoices] = useState([]);
     const [recentUsers, setRecentUsers] = useState([]);
+    const [recentInstances, setRecentInstances] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,11 +32,15 @@ const Administration = () => {
                 const chatbots = await getTotalChatbots();
                 setTotalChatbots(chatbots);
 
-                const invoices = await getRecentInvoices();
-                setRecentInvoices(invoices.results || invoices);  // Verifica si la API devuelve `results`
-
                 const usersList = await getRecentUsers();
-                setRecentUsers(usersList.results || usersList);  // Verifica si la API devuelve `results`
+                setRecentUsers(usersList.results || usersList); 
+
+                const whatsApps = await getWhatsAppAccounts();
+                setWhatsappAccounts(whatsApps);
+
+                const instances = await getRecentInstances();
+                setRecentInstances(instances.results || instances);
+
             } catch (error) {
                 console.error("Error al cargar datos del dashboard", error);
             }
@@ -134,21 +132,21 @@ const Administration = () => {
                         </Col>
 
                         <Col md={6}>
-                            <h4>Latest Invoices</h4>
+                            <h4>Latest Instances</h4>
                             <Table striped bordered hover>
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
+                                        <th>Instance Key</th>
+                                        <th>WhatsApp Account</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {recentInvoices.map((invoice, index) => (
+                                    {recentInstances.map((instance, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{invoice.last_payment_date}</td>
-                                            <td>${invoice.last_payment_amount}</td>
+                                            <td>{instance.instance_key}</td>
+                                            <td>{whatsappAccounts.find((acc) => acc.id === instance.whatsapp)?.name || "N/A"}</td>
                                         </tr>
                                     ))}
                                 </tbody>

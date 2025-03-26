@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api/";
 
-// Crear una instancia de Axios
+// Create an instance of Axios
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -10,20 +10,20 @@ const api = axios.create({
     },
 });
 
-// ✅ Interceptor para refrescar el token automáticamente
+// ✅ Interceptor to automatically refresh the token
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
-        // Si el error es 401 (Unauthorized) y no hemos intentado ya refrescar el token
+        // If the error is 401 (Unauthorized) and we have not already tried to refresh the token
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
                 const refreshToken = localStorage.getItem("refresh_token");
-                if (!refreshToken) throw new Error("No hay refresh token disponible");
+                if (!refreshToken) throw new Error("No refresh token available");
 
-                // Pedir un nuevo access token
+                // Request a new access token
                 const res = await axios.post(`${API_BASE_URL}token/refresh/`, {
                     refresh: refreshToken,
                 });
@@ -31,23 +31,23 @@ api.interceptors.response.use(
                 const newAccessToken = res.data.access;
                 localStorage.setItem("access_token", newAccessToken);
 
-                // Actualizar headers y repetir la petición original
+                // Update headers and repeat original request
                 api.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
                 originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
                 return api(originalRequest);
             } catch (refreshError) {
-                console.error("Error al refrescar el token", refreshError);
+                console.error("Error refreshing token", refreshError);
                 localStorage.removeItem("access_token");
                 localStorage.removeItem("refresh_token");
-                window.location.href = "/login"; // Redirigir a login si el refresh token también expiró
+                window.location.href = "/login"; // Redirect to login if refresh token also expired
             }
         }
         return Promise.reject(error);
     }
 );
 
-// ✅ Función para iniciar sesión
+// ✅ Login function
 export const loginUser = async (credentials) => {
     try {
         const response = await axios.post(`${API_BASE_URL}token/`, credentials);
@@ -60,24 +60,24 @@ export const loginUser = async (credentials) => {
         if (user_id) {
             localStorage.setItem("user_id", user_id);
         } else {
-            console.error("Error: user_id no está presente en la respuesta.");
+            console.error("Error: user_id is not present in the response.");
         }
 
         return response.data;
     } catch (error) {
-        console.error("Error en el inicio de sesión", error.response?.data || error.message);
+        console.error("Login error", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Función para obtener el perfil del usuario autenticado
+// ✅ Function for obtaining the authenticated user profile
 export const getUserProfile = async () => {
     try {
         const token = localStorage.getItem("access_token");
         const userId = localStorage.getItem("user_id");
 
         if (!token || !userId) {
-            throw new Error("No hay usuario autenticado");
+            throw new Error("No authenticated user");
         }
 
         const response = await api.get(`users/${userId}/`, {
@@ -88,17 +88,17 @@ export const getUserProfile = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener perfil de usuario", error.response?.data || error.message);
+        console.error("Error getting user profile", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Función para obtener los detalles de un plan por ID
+// ✅ Function to obtain the details of a plan per ID
 export const getPlanDetails = async (planId) => {
     try {
         const token = localStorage.getItem("access_token");
         if (!token || !planId) {
-            throw new Error("No hay usuario autenticado o el plan no existe");
+            throw new Error("No authenticated user or plan does not exist");
         }
 
         const response = await api.get(`plans/${planId}/`, {
@@ -109,17 +109,17 @@ export const getPlanDetails = async (planId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener los detalles del plan", error.response?.data || error.message);
+        console.error("Error obtaining plan details", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todos los billing registrados
+// ✅ Get all registered billings
 export const getBillingDetails = async () => {
     try {
         const token = localStorage.getItem("access_token");
         if (!token) {
-            throw new Error("No hay usuario autenticado.");
+            throw new Error("No authenticated user");
         }
 
         const response = await api.get(`billing/`, {
@@ -130,132 +130,131 @@ export const getBillingDetails = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener los detalles del billing", error.response?.data || error.message);
+        console.error("Error obtaining billing details", error.response?.data || error.message);
         throw error;
     }
 };
 
-
-// ✅ Obtener total de usuarios
+// ✅ Get total users
 export const getTotalUsers = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get(`users/`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data.count; // Retorna la cantidad total de usuarios
+        return response.data.length; 
     } catch (error) {
-        console.error("Error al obtener el total de usuarios", error.response?.data || error.message);
-        return 0;  // Retorna 0 en caso de error
+        console.error("Error in obtaining the total number of users", error.response?.data || error.message);
+        return 0;  
     }
 };
 
 
-// ✅ Obtener total de planes
+// ✅ Obtain total plans
 export const getTotalPlans = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("plans/", {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data.count;
+        return response.data.length;
     } catch (error) {
-        console.error("Error al obtener el total de planes", error.response?.data || error.message);
+        console.error("Error in obtaining the total number of plans", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener total de cuentas de WhatsApp vinculadas
+// ✅ Get total of linked WhatsApp accounts.
 export const getTotalWhatsAppAccounts = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("whatsapp-accounts/", {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data.count;
+        return response.data.length;
     } catch (error) {
-        console.error("Error al obtener las cuentas de WhatsApp", error.response?.data || error.message);
+        console.error("Error when obtaining WhatsApp accounts", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener total de chatbots creados
+// ✅ Get total number of chatbots created
 export const getTotalChatbots = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("chatbots/", {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data.count;
+        return response.data.length;
     } catch (error) {
-        console.error("Error al obtener el total de chatbots", error.response?.data || error.message);
+        console.error("Error in obtaining the total number of chatbots", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener últimas facturas generadas
-export const getRecentInvoices = async () => {
-    try {
+// ✅ Get last instances
+export const getRecentInstances = async() => {
+    try{
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
-        const response = await api.get("billing/", {
+        const response = await api.get("instances/",{
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Verificar si response.data.results es un array antes de usar slice
-        if (Array.isArray(response.data.results)) {
-            return response.data.results.slice(-5); // Devuelve las últimas 5 facturas
-        } else {
-            console.error("Formato inesperado en getRecentInvoices:", response.data);
-            return []; // Retorna un array vacío si no es el formato esperado
+        //Check if response.data is an aray before using slice
+        if(Array.isArray(response.data)){
+            return response.data.slice(-5);
+        }else{
+            console.error("Unexpected format in getRecentInstances:", response.data);
+            return [];
         }
-    } catch (error) {
-        console.error("Error al obtener las últimas facturas", error.response?.data || error.message);
+    }catch(error){
+        console.error("Error obtaining the latest instances", error.response?.data || error.message);
         return [];
     }
 };
 
-// ✅ Obtener los últimos usuarios registrados
+// ✅ Get the latest registered users
 export const getRecentUsers = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("users/", {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Verificar si response.data.results es un array antes de usar slice
-        if (Array.isArray(response.data.results)) {
-            return response.data.results.slice(-5); // Devuelve los últimos 5 usuarios
+        // Check if response.data is an array before using slice
+        if (Array.isArray(response.data)) {
+            return response.data.slice(-5);
         } else {
-            console.error("Formato inesperado en getRecentUsers:", response.data);
-            return []; // Retorna un array vacío si no es el formato esperado
+            console.error("Unexpected format in getRecentUsers:", response.data);
+            return []; // Returns an empty array if not the expected format
         }
     } catch (error) {
-        console.error("Error al obtener los últimos usuarios", error.response?.data || error.message);
+        console.error("Error getting the last users", error.response?.data || error.message);
         return [];
     }
 };
 
-// ✅ Obtener lista de usuarios
+// ✅ Get list of users
 export const getUsers = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("users/", {
             headers: { Authorization: `Bearer ${token}` },
@@ -263,16 +262,16 @@ export const getUsers = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener usuarios", error.response?.data || error.message);
+        console.error("Error getting users", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar usuario
+// ✅ Delete user
 export const deleteUser = async (userId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`users/${userId}/`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -280,16 +279,16 @@ export const deleteUser = async (userId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar usuario", error.response?.data || error.message);
+        console.error("Error deleting user", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un Usuario
+// ✅ Create a User
 export const createUser = async (userData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("users/", userData, {
             headers: { Authorization: `Bearer ${token}` }
@@ -297,16 +296,16 @@ export const createUser = async (userData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear al usuario", error.response?.data || error.message);
+        console.error("Error creating user", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Editar un usuario
+// ✅ Edit a user
 export const updateUser = async (userId, userData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`users/${userId}/`, userData, {
             headers: { Authorization: `Bearer ${token}` }
@@ -314,17 +313,17 @@ export const updateUser = async (userId, userData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al editar al usuario:", error.response?.data || error.message);
+        console.error("Error when editing the user", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Función para obtener los detalles de un rol por ID
+// ✅ Function to obtain the details of a role by ID
 export const getRoleDetails = async (roleId) => {
     try {
         const token = localStorage.getItem("access_token");
         if (!token || !roleId) {
-            throw new Error("No hay usuario autenticado o el rol no existe");
+            throw new Error("No authenticated user or role does not exist");
         }
 
         const response = await api.get(`roles/${roleId}/`, {
@@ -333,18 +332,18 @@ export const getRoleDetails = async (roleId) => {
             },
         });
 
-        return response.data; // Devuelve la información del rol
+        return response.data;
     } catch (error) {
-        console.error("Error al obtener los detalles del rol", error.response?.data || error.message);
+        console.error("Error obtaining role details", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todos los roles
+// ✅ Get all roles
 export const getRoles = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get(`roles/`, {
             headers: {
@@ -352,52 +351,52 @@ export const getRoles = async () => {
             },
         });
 
-        return response.data; // Devuelve la lista de roles
+        return response.data;
     } catch (error) {
-        console.error("Error al obtener los roles", error.response?.data || error.message);
+        console.error("Error when obtaining roles", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un nuevo rol
+// ✅ Create a new role
 export const createRole = async (roleData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("roles/", roleData, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data; // Devuelve el rol creado
+        return response.data;
     } catch (error) {
-        console.error("Error al crear el rol", error.response?.data || error.message);
+        console.error("Error when creating the role", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Actualizar un rol existente
+// ✅ Updating an existing role
 export const updateRole = async (roleId, roleData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`roles/${roleId}/`, roleData, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        return response.data; // Devuelve el rol actualizado
+        return response.data; 
     } catch (error) {
-        console.error("Error al actualizar el rol", error.response?.data || error.message);
+        console.error("Error updating the role", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar un rol
+// ✅ Delete a role
 export const deleteRole = async (roleId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`roles/${roleId}/`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -405,16 +404,16 @@ export const deleteRole = async (roleId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el rol", error.response?.data || error.message);
+        console.error("Error deleting role", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todos los planes
+// ✅ Get all plans
 export const getPlans = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("plans/", {
             headers: {
@@ -424,15 +423,15 @@ export const getPlans = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener todos los planes", error.response?.data || error.message);
+        console.error("Error obtaining all plans", error.response?.data || error.message);
     }
 };
 
-// ✅ Crear un nuevo Plan
+// ✅ Create a new Plan
 export const createPlan = async (planData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("plans/", planData, {
             headers: {
@@ -442,16 +441,16 @@ export const createPlan = async (planData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear el plan", error.response?.data || error.message);
+        console.error("Error when creating the plan", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Actualizar un Plan existente
+// ✅ Updating an existing Plan
 export const updatePlan = async (planId, planData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`plans/${planId}/`, planData, {
             headers: {
@@ -461,16 +460,16 @@ export const updatePlan = async (planId, planData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar el plan", error.response?.data || error.message);
+        console.error("Error updating the plan", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar un Plan
+// ✅ Delete a Plan
 export const deletePlan = async (planId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`plans/${planId}/`, {
             headers: {
@@ -480,16 +479,16 @@ export const deletePlan = async (planId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el plan", error.response?.data || error.message);
+        console.error("Error deleting plan", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener los Chatbots
+// ✅ Obtaining Chatbots
 export const getChatbots = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("chatbots/", {
             headers: {
@@ -499,16 +498,16 @@ export const getChatbots = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener los chatbots", error.response?.data || error.message);
+        console.error("Error when obtaining chatbots", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un Chatbot
+// ✅ Create a Chatbot
 export const createChatbot = async (chatbotData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("chatbots/", chatbotData, {
             headers: {
@@ -518,15 +517,16 @@ export const createChatbot = async (chatbotData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear el chatbot", error.response?.data || error.message);
+        console.error("Error creating chatbot", error.response?.data || error.message);
         throw error;
     }
 };
-// ✅ Actualizar un chatbot ya existente
+
+// ✅ Upgrading an existing chatbot
 export const updateChatbot = async (chatbotId, chatbotData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`chatbots/${chatbotId}/`, chatbotData, {
             headers: {
@@ -536,16 +536,16 @@ export const updateChatbot = async (chatbotId, chatbotData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar el chatbot", error.response?.data || error.message);
+        console.error("Error updating chatbot", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar un chatbot
+// ✅ Delete a chatbot
 export const deleteChatbot = async (chatbotId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`chatbots/${chatbotId}/`, {
             headers: {
@@ -553,16 +553,16 @@ export const deleteChatbot = async (chatbotId) => {
             },
         })
     } catch (error) {
-        console.error("Error al eliminar el chatbot", error.response?.data || error.message);
+        console.error("Error deleting chatbot", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todos los Whatsapp Accounts
+// ✅ Get all Whatsapp Accounts
 export const getWhatsAppAccounts = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("whatsapp-accounts/", {
             headers: { Authorization: `Bearer ${token}` },
@@ -570,16 +570,16 @@ export const getWhatsAppAccounts = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener las cuentas de WhatsApp", error.response?.data || error.message);
+        console.error("Error when obtaining WhatsApp accounts", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un Whatsapp Account
+// ✅ Create a Whatsapp Account
 export const createWhatsAppAccount = async (accountData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("whatsapp-accounts/", accountData, {
             headers: {
@@ -589,16 +589,16 @@ export const createWhatsAppAccount = async (accountData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear la cuenta de WhatsApp", error.response?.data || error.message);
+        console.error("Error when creating WhatsApp account", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Actualizar un Whatsapp Account ya existente
+// ✅ Updating an existing Whatsapp Account
 export const updateWhatsAppAccount = async (accountId, accountData) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`whatsapp-accounts/${accountId}/`, accountData, {
             headers: {
@@ -608,16 +608,16 @@ export const updateWhatsAppAccount = async (accountId, accountData) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar la cuenta de WhatsApp", error.response?.data || error.message);
+        console.error("Error updating WhatsApp account", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar un Whatsapp Accounts
+// ✅ Delete a Whatsapp Accounts
 export const deleteWhatsAppAccount = async (accountId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`whatsapp-accounts/${accountId}/`, {
             headers: {
@@ -627,16 +627,16 @@ export const deleteWhatsAppAccount = async (accountId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar la cuenta de WhatsApp", error.response?.data || error.message);
+        console.error("Error when deleting WhatsApp account", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todos los mensajes
+// ✅ Get all messages
 export const getMessages = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("messages/", {
             headers: {
@@ -646,16 +646,16 @@ export const getMessages = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener todos los mensajes", error.response?.data || error.message);
+        console.error("Error getting all messages", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar un mensaje
+// ✅ Delete a message
 export const deleteMessage = async (messageId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`messages/${messageId}/`, {
             headers: {
@@ -665,35 +665,16 @@ export const deleteMessage = async (messageId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar un mensaje", error.response?.data || error.message);
+        console.error("Error deleting a message", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Obtener todas las instances
-export const getIntances = async () => {
-    try{
-        const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
-
-        const response = await api.get("instances/", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-        });
-
-        return response.data;
-    } catch(error){
-        console.error("Error al obtener todas las instancias", error.response?.data || error.message);
-        throw error;
-    }
-};
-
-// ✅ Obtener todos los permisos asignados a planes (PlanPermission)
+// ✅ Obtain all permissions assigned to plans (PlanPermission)
 export const getPermissions = async () => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.get("plan-permissions/", {
             headers: {
@@ -703,16 +684,16 @@ export const getPermissions = async () => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al obtener todos los permisos por plan", error.response?.data || error.message);
+        console.error("Error obtaining all permits per plan", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un permiso asignado a un plan (requiere que el permiso ya exista)
+// ✅ Create a permit assigned to a plan (requires the permit to already exist)
 export const createPermission = async (data) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("plan-permissions/", data, {
             headers: {
@@ -722,16 +703,16 @@ export const createPermission = async (data) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear la relación plan-permiso", error.response?.data || error.message);
+        console.error("Error when creating the plan-permission relationship", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Eliminar una relación Plan-Permission
+// ✅ Removing a Plan-Permission relationship
 export const deletePermission = async (permissionId) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.delete(`plan-permissions/${permissionId}/`, {
             headers: {
@@ -741,16 +722,16 @@ export const deletePermission = async (permissionId) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el permiso del plan", error.response?.data || error.message);
+        console.error("Error deleting the plan permit", error.response?.data || error.message);
         throw error;
     }
 };
 
-// 🟡 Opcional: si quieres editar la relación (poco común)
+// 🟡 Optional: if you want to edit the ratio (uncommon)
 export const updatePermission = async (permissionId, data) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.put(`permissions/${permissionId}/`, data, {
             headers: {
@@ -760,16 +741,16 @@ export const updatePermission = async (permissionId, data) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar la relación plan-permiso", error.response?.data || error.message);
+        console.error("Error when updating the plan-permission relationship", error.response?.data || error.message);
         throw error;
     }
 };
 
-// ✅ Crear un nuevo permiso (sin plan todavía)
+// ✅ Create a new license (no plan yet)
 export const createNewPermission = async (data) => {
     try {
         const token = localStorage.getItem("access_token");
-        if (!token) throw new Error("No hay usuario autenticado.");
+        if (!token) throw new Error("No authenticated user");
 
         const response = await api.post("permissions/", data, {
             headers: {
@@ -779,12 +760,66 @@ export const createNewPermission = async (data) => {
 
         return response.data;
     } catch (error) {
-        console.error("Error al crear un nuevo permiso", error.response?.data || error.message);
+        console.error("Error creating a new permit", error.response?.data || error.message);
         throw error;
     }
 };
 
+// ✅ Obtain all instances
+export const getInstances = async () => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
 
+        const response = await api.get("instances/", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
+        return response.data;
+    } catch (error) {
+        console.error("Error getting all instances", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Create a new instance
+export const createInstance = async (instanceData) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.post("instances/", instanceData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error creating a new instance", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// ✅ Delete a instance
+export const deleteInstance = async (instanceId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.delete(`instances/${instanceId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting instance", error.response?.data || error.message);
+        throw error;
+    }
+};
 
 export default api;

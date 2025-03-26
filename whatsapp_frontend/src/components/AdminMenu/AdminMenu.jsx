@@ -2,7 +2,7 @@ import React from "react";
 import { ListGroup, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
-    FaPlug, FaRobot, FaComments, FaUsers, FaKey, FaDatabase, FaUserShield, FaCogs
+    FaPlug, FaRobot, FaComments, FaUsers, FaKey, FaDatabase, FaUserShield, FaCogs, FaServer   
 } from "react-icons/fa";
 import "./AdminMenu.css";
 
@@ -14,6 +14,7 @@ const menuItems = [
     { icon: <FaCogs className="icon whatsapp-icon" />, title: "WhatsApp Accounts", desc: "Manage linked accounts", link: "/administration/whatsapp_accounts" },
     { icon: <FaComments className="icon messages-icon" />, title: "Messages", desc: "Review chatbot messages", link: "/administration/messages" },
     { icon: <FaKey className="icon permissions-icon" />, title: "Permissions", desc: "Set user access levels", link: "/administration/permissions" }, 
+    { icon: <FaServer className="icon instances-icon"   />, title: "Instances", desc: "Manage instances", link: "/administration/instances"},
     { icon: <FaPlug className="icon api-icon" />, title: "API", desc: "Manage system integrations", link: "/administration/api" },
 ];
 
