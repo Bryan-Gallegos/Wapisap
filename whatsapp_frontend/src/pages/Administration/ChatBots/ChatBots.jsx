@@ -34,7 +34,7 @@ const Chatbots = () => {
     const fetchChatbots = async () => {
         try {
             const response = await getChatbots();
-            setChatbots(response.results);
+            setChatbots(response.results || response);
         } catch (error) {
             console.error("Error obtaining chatbots", error);
         }
@@ -43,7 +43,7 @@ const Chatbots = () => {
     const fetchUsers = async () => {
         try {
             const response = await getUsers();
-            setUsers(response.results);
+            setUsers(response.results || response);
         } catch (error) {
             console.error("Error obtaining users", error);
         }
@@ -52,7 +52,7 @@ const Chatbots = () => {
     const fetchWhatsappAccounts = async () => {
         try {
             const response = await getWhatsAppAccounts();
-            setWhatsappAccounts(response.results);
+            setWhatsappAccounts(response.results || response);
         } catch (error) {
             console.error("Error fetching WhatsApp accounts", error);
         }
@@ -138,9 +138,13 @@ const Chatbots = () => {
         setSubmitting(false);
     };
 
+    const filteredChatbots = chatbots.filter(chatbots =>
+        chatbots.name.toLowerCase().includes(search.toLowerCase())
+    );
+
     const indexOfLastChatbot = currentPage * chatbotsPerPage;
     const indexOfFirstChatbot = indexOfLastChatbot - chatbotsPerPage;
-    const currentChatbots = chatbots.slice(indexOfFirstChatbot, indexOfLastChatbot);
+    const currentChatbots = filteredChatbots.slice(indexOfFirstChatbot, indexOfLastChatbot);
 
 
     return (
@@ -205,7 +209,7 @@ const Chatbots = () => {
                     </Table>
 
                     <Pagination className="custom-pagination justify-content-center">
-                        {Array.from({ length: Math.ceil(chatbots.length / chatbotsPerPage) }, (_, index) => (
+                        {Array.from({ length: Math.ceil(filteredChatbots.length / chatbotsPerPage) }, (_, index) => (
                             <Pagination.Item
                                 key={index + 1}
                                 active={index + 1 === currentPage}

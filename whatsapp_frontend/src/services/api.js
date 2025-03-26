@@ -752,7 +752,7 @@ export const updatePermission = async (permissionId, data) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("No hay usuario autenticado.");
 
-        const response = await api.put(`plan-permissions/${permissionId}/`, data, {
+        const response = await api.put(`permissions/${permissionId}/`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

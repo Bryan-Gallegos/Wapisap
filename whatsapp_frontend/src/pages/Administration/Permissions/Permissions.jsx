@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPlans, getPermissions, createPermission, createNewPermission, deletePermission } from "../../../services/api";
+import { getPlans, getPermissions, createPermission, updatePermission, createNewPermission, deletePermission } from "../../../services/api";
 import { Container, Row, Col, Table, Button, Form, Modal, Pagination } from "react-bootstrap";
 import { FaKey, FaPlus, FaTrash, FaEdit, FaEye } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -7,12 +7,15 @@ import Topbar from "../../../components/Topbar/Topbar";
 import AdminMenu from "../../../components/AdminMenu/AdminMenu";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import "./Permissions.css";
 
 const Permissions = () => {
     const [permissions, setPermissions] = useState([]);
     const [plans, setPlans] = useState([]);
     const [search, setSearch] = useState("");
+    const [selectedPlanFilter, setSelectedPlanFilter] = useState("");
     const [show, setShow] = useState(false);
     const [showViewModal, setShowViewModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -34,7 +37,7 @@ const Permissions = () => {
     const fetchPermissions = async () => {
         try {
             const response = await getPermissions();
-            setPermissions(response.results || response); 
+            setPermissions(response.results || response);
         } catch (error) {
             console.error("Error getting permissions", error);
         }
@@ -52,7 +55,7 @@ const Permissions = () => {
     const handleShow = (permission) => {
         if (permission) {
             setSelectedPermission(permission);
-            setPermissionText(permission.permission || "");
+            setPermissionText(permission.permission.name || "");
             setSelectedPlan(permission.plan || "");
         } else {
             setSelectedPermission(null);
@@ -100,16 +103,24 @@ const Permissions = () => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            const permissionPayload = { name: values.permission.trim() };
-            const createdPermission = await createNewPermission(permissionPayload);
+            if (selectedPermission?.id) {
+                const permissionPayload = { name: values.permission.trim() };
+                await updatePermission(selectedPermission.permission.id, permissionPayload);
 
-            const relationPayload = {
-                plan: values.plan,
-                permission_id: createdPermission.id
-            };
+                showNotification("Permission upload successfully.");
+            } else {
+                const permissionPayload = { name: values.permission.trim() };
+                const createdPermission = await createNewPermission(permissionPayload);
 
-            await createPermission(relationPayload);
-            showNotification("Permission assigned to plan successfully.");
+                const relationPayload = {
+                    plan: values.plan,
+                    permission_id: createdPermission.id
+                };
+
+                await createPermission(relationPayload);
+                showNotification("Permission assigned to plan successfully.");
+            }
+
             fetchPermissions();
             handleClose();
         } catch (error) {
@@ -119,7 +130,6 @@ const Permissions = () => {
 
         setSubmitting(false);
     };
-
 
     const showNotification = (message) => {
         setNotificationMessage(message);
@@ -140,14 +150,40 @@ const Permissions = () => {
     };
 
     const filteredPermissions = permissions.filter((perm) =>
-        perm.permission?.name?.toLowerCase().includes(search.toLowerCase()) ||
-        perm.plan?.name?.toLowerCase().includes(search.toLowerCase())
+        (perm.permission?.name?.toLowerCase().includes(search.toLowerCase()) ||
+            perm.plan?.name?.toLowerCase().includes(search.toLowerCase())) &&
+        (selectedPlanFilter === "" || perm.plan === parseInt(selectedPlanFilter))
     );
 
     const paginationPermissions = filteredPermissions.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    const handleExportPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(14);
+        doc.text("Lista de Permisos", 14, 15);
+      
+        const data = filteredPermissions.map((perm) => [
+          perm.id,
+          perm.permission?.name || "",
+          plans.find((p) => p.id === perm.plan)?.name || "N/A",
+        ]);
+      
+        autoTable(doc, {
+            startY: 20,
+            head: [["#", "Permission", "Plan"]],
+            body: data,
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [41, 128, 185] },
+            alternateRowStyles: { fillColor: [245, 245, 245] },
+            margin: { top: 10 }
+          });
+      
+        doc.save("permissions.pdf");
+        showNotification("✅ PDF generated correctly");
+      };
 
     return (
         <div className="permissions-page">
@@ -157,19 +193,40 @@ const Permissions = () => {
             </div>
             <div className="admin-content">
                 <Topbar />
-                <Container className="p-4">
+                <Container fluid className="p-4">
                     <h2><FaKey color="green" /> Permissions</h2>
                     <Row className="mb-3">
-                        <Col md={8}>
+                        <Col md={4}>
                             <Form.Control
-                                placeholder="Search by permission or plan"
+                                placeholder="Search by permission"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </Col>
-                        <Col md={4}>
+
+                        <Col md={2}>
+                            <Form.Select
+                                value={selectedPlanFilter}
+                                onChange={(e) => setSelectedPlanFilter(e.target.value)}
+                            >
+                                <option value="">All Plans</option>
+                                {plans.map((plan) => (
+                                    <option key={plan.id} value={plan.id}>
+                                        {plan.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Col>
+
+                        <Col md={2}>
                             <Button variant="success" onClick={() => handleShow(null)}>
                                 <FaPlus /> Add Permission
+                            </Button>
+                        </Col>
+
+                        <Col md={2}>
+                            <Button variant="outline-secondary" onClick={handleExportPDF}>
+                                📄 Export to PDF
                             </Button>
                         </Col>
                     </Row>
@@ -191,10 +248,13 @@ const Permissions = () => {
                                     <td>{plans.find((p) => p.id === perm.plan)?.name || "N/A"}</td>
                                     <td>
                                         <div className="action-buttons">
-                                            <Button size="sm" variant="outline-info" onClick={() => handleShowViewModal(perm)}>
+                                            <Button size="sm" variant="outline-info" onClick={() => handleShowViewModal(perm)} title="View Details">
                                                 <FaEye /> View
                                             </Button>{" "}
-                                            <Button size="sm" variant="outline-danger" onClick={() => handleShowDeletePermission(perm)}>
+                                            <Button size="sm" variant="outline-primary" onClick={() => handleShow(perm)} title="Edit Permission">
+                                                <FaEdit /> Edit
+                                            </Button>
+                                            <Button size="sm" variant="outline-danger" onClick={() => handleShowDeletePermission(perm)} title="Delete Permission">
                                                 <FaTrash /> Delete
                                             </Button>
                                         </div>
@@ -227,7 +287,7 @@ const Permissions = () => {
                         {selectedPermissionDetails && (
                             <div className="p-2">
                                 <p><strong>ID:</strong> {selectedPermissionDetails.id}</p>
-                                <p><strong>Permission:</strong> {selectedPermissionDetails.permission}</p>
+                                <p><strong>Permission:</strong> {selectedPermissionDetails.permission?.name}</p>
                                 <p><strong>Plan:</strong> {plans.find(p => p.id === selectedPermissionDetails.plan)?.name || "N/A"}</p>
                             </div>
                         )}
@@ -246,7 +306,7 @@ const Permissions = () => {
                         <Formik
                             enableReinitialize
                             initialValues={{
-                                permission: selectedPermission?.permission || "",
+                                permission: selectedPermission?.permission.name || "",
                                 plan: selectedPermission?.plan || "",
                             }}
                             validationSchema={validationSchema}
@@ -313,7 +373,7 @@ const Permissions = () => {
                     </Modal.Header>
                     <Modal.Body>
                         {permissionToDelete && (
-                            <p>Are you sure you want to delete the permission <strong>{permissionToDelete.permission}</strong>?</p>
+                            <p>Are you sure you want to delete the permission <strong>{permissionToDelete.permission?.name}</strong>?</p>
                         )}
                     </Modal.Body>
                     <Modal.Footer>

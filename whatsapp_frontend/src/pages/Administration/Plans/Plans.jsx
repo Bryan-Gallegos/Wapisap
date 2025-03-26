@@ -33,7 +33,7 @@ const Plans = () => {
     const fetchPlans = async () => {
         try {
             const response = await getPlans();
-            setPlans(response.results);
+            setPlans(response.results || response);
         } catch (error) {
             console.error("Error obtaining plans", error);
         }
@@ -42,10 +42,11 @@ const Plans = () => {
     const fetchUsers = async () => {
         try {
             const response = await getUsers();
-            setUsers(response.results);
+            const userData = response.results || response;
+            setUsers(userData);
 
             const countByPlan = {};
-            response.results.forEach(user => {
+            userData.forEach(user => {
                 countByPlan[user.plan] = (countByPlan[user.plan] || 0) + 1;
             });
             setPlanUserCount(countByPlan);
@@ -66,7 +67,7 @@ const Plans = () => {
 
     const handleShowViewPlan = (plan) => {
         const filteredUsers = users.filter(user => user.plan === plan.id);
-        setSelectedPlanDetails({ ...plan, users: filteredUsers});
+        setSelectedPlanDetails({ ...plan, users: filteredUsers });
         setShowViewModal(true);
     };
 
@@ -143,10 +144,13 @@ const Plans = () => {
         setSubmitting(false);
     };
 
+    const filteredPlans = plans.filter(plan =>
+        plan.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     const indexOfLastPlan = currentPage * plansPerPage;
     const indexOfFirstPlan = indexOfLastPlan - plansPerPage;
-    const currentPlans = plans.slice(indexOfFirstPlan, indexOfLastPlan);
+    const currentPlans = filteredPlans.slice(indexOfFirstPlan, indexOfLastPlan);
 
     return (
         <div className="plans-page">
@@ -157,7 +161,7 @@ const Plans = () => {
             <div className="admin-content">
                 <Topbar />
                 <Container fluid className="p-4">
-                    <h2><FaDatabase color="#AA00FF"/> Plans</h2>
+                    <h2><FaDatabase color="#AA00FF" /> Plans</h2>
                     <Row className="mb-3">
                         <Col md={7}>
                             <Form.Control
@@ -208,7 +212,7 @@ const Plans = () => {
                     </Table>
 
                     <Pagination className="custom-pagination justify-content-center">
-                        {Array.from({ length: Math.ceil(plans.length / plansPerPage) }, (_, index) => (
+                        {Array.from({ length: Math.ceil(filteredPlans.length / plansPerPage) }, (_, index) => (
                             <Pagination.Item
                                 key={index + 1}
                                 active={index + 1 === currentPage}
@@ -238,18 +242,18 @@ const Plans = () => {
                             <p><strong>Contacts per Group:</strong> {selectedPlanDetails.contacts_per_group}</p>
                             <p><strong>Number of Users:</strong> {planUserCount[selectedPlanDetails.id] || 0}</p>
                             {selectedPlanDetails.users && selectedPlanDetails.users.length > 0 ? (
-                                <div style={{maxHeight:"300px", overflowY: "auto", border:"1px solid #ccc", padding:"10px", borderRadius:"5px"}}>
+                                <div style={{ maxHeight: "300px", overflowY: "auto", border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
                                     <h5>Users with this plan:</h5>
-                                    <ul style={{listStyle: "none", padding: 0}}>
+                                    <ul style={{ listStyle: "none", padding: 0 }}>
                                         {selectedPlanDetails.users.map(user => (
-                                            <li key={user.id} style={{padding: "5px 0", borderBottom: "1px solid #eee"}}>
+                                            <li key={user.id} style={{ padding: "5px 0", borderBottom: "1px solid #eee" }}>
                                                 {user.first_name} {user.last_name} ({user.email})
                                             </li>
                                         ))}
                                     </ul>
 
                                 </div>
-                            ): (
+                            ) : (
                                 <p>No users are assigned to this plan</p>
                             )}
                         </div>

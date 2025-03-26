@@ -28,6 +28,8 @@ const Users = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [showEditPlan, setShowEditPlan] = useState(false);
   const [selectedUserPlan, setSelectedUserPlan] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState("");
   const usersPerPage = 5;
 
   useEffect(() => {
@@ -230,9 +232,21 @@ const Users = () => {
     setSubmitting(false);
   };
 
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
+    const matchesSearch =
+      fullName.includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase());
+  
+    const matchesRole = selectedRole ? user.role === parseInt(selectedRole) : true;
+    const matchesPlan = selectedPlan ? user.plan === parseInt(selectedPlan) : true;
+  
+    return matchesSearch && matchesRole && matchesPlan;
+  });
+
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
   return (
     <div className="users-page">
@@ -245,7 +259,7 @@ const Users = () => {
         <Container fluid className="p-4">
           <h2><FaUsers color="#007bff" /> Users</h2>
           <Row className="mb-3">
-            <Col md={7}>
+            <Col md={4}>
               <Form.Control
                 type="text"
                 placeholder="Search user..."
@@ -253,7 +267,25 @@ const Users = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Col>
-            <Col md={5}>
+
+            <Col md={3}>
+              <Form.Select value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)}>
+                <option value="">Filter by Role</option>
+                {rolesList.map((role) => (
+                  <option key={role.id} value={role.id}>{role.name}</option>
+                ))}
+              </Form.Select>
+            </Col>
+            <Col md={3}>
+              <Form.Select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)}>
+                <option value="">Filter by Plan</option>
+                {Object.entries(plans).map(([planId, planName]) => (
+                  <option key={planId} value={planId}>{planName}</option>
+                ))}
+              </Form.Select>
+            </Col>
+
+            <Col md={2}>
               <Button variant="success" onClick={() => handleShow(null)}><FaPlus /> Create User</Button>
             </Col>
           </Row>
@@ -351,7 +383,7 @@ const Users = () => {
 
           {/* Pagination */}
           <Pagination className="custom-pagination">
-            {[...Array(Math.ceil(users.length / usersPerPage)).keys()].map(number => (
+            {[...Array(Math.ceil(filteredUsers.length / usersPerPage)).keys()].map(number => (
               <Pagination.Item
                 key={number + 1}
                 active={number + 1 === currentPage}

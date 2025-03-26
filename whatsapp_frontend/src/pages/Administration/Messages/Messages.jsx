@@ -31,7 +31,7 @@ const Messages = () => {
     const fetchMessages = async () => {
         try {
             const response = await getMessages();
-            setMesssages(response.results);
+            setMesssages(response.results || response);
         } catch (error) {
             console.error("Error getting messages", error);
         }
@@ -40,7 +40,7 @@ const Messages = () => {
     const fetchIntances = async () => {
         try {
             const response = await getIntances();
-            setInstances(response.results);
+            setInstances(response.results || response);
         } catch (error) {
             console.error("Error getting instances", error);
         }
@@ -49,7 +49,7 @@ const Messages = () => {
     const fetchWhatsappAccounts = async () => {
         try {
             const response = await getWhatsAppAccounts();
-            setWhatsappAccounts(response.results);
+            setWhatsappAccounts(response.results || response);
         } catch (error) {
             console.error("Error getting whatsapp accounts", error);
         }

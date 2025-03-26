@@ -13,6 +13,8 @@ const WhatsaapAccount = () => {
     const [accounts, setAccounts] = useState([]);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState("");
+    const [selectedUser, setSelectedUser] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("");
     const [show, setShow] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +34,7 @@ const WhatsaapAccount = () => {
     const fetchAccounts = async () => {
         try {
             const response = await getWhatsAppAccounts();
-            setAccounts(response.results);
+            setAccounts(response.results || response);
         } catch (error) {
             console.error("Error getting Whatsapp Accounts", error);
         }
@@ -41,7 +43,7 @@ const WhatsaapAccount = () => {
     const fetchUsers = async () => {
         try {
             const response = await getUsers();
-            setUsers(response.results);
+            setUsers(response.results || response);
         } catch (error) {
             console.error("Error getting users", error);
         }
@@ -127,9 +129,13 @@ const WhatsaapAccount = () => {
         setSubmitting(false);
     };
 
-    const filteredAccounts = accounts.filter((account) =>
-        account.phone_number.includes(search)
-    );
+    const filteredAccounts = accounts.filter((account) => {
+        const phoneMatch = account.phone_number.includes(search);
+        const userMatch = selectedUser ? account.user === parseInt(selectedUser) : true;
+        const statusMatch = selectedStatus ? account.status === selectedStatus : true;
+
+        return phoneMatch && userMatch && statusMatch;
+    });
 
     const currentItems = filteredAccounts.slice(
         (currentPage - 1) * accountsPerPage,
@@ -147,7 +153,7 @@ const WhatsaapAccount = () => {
                 <Container fluid className="p-4">
                     <h2><FaWhatsapp color="green" /> WhatsApp Accounts</h2>
                     <Row className="mb-3">
-                        <Col md={7}>
+                        <Col md={4}>
                             <Form.Control
                                 type="text"
                                 placeholder="Search by phone number..."
@@ -155,7 +161,33 @@ const WhatsaapAccount = () => {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </Col>
-                        <Col md={5}>
+
+                        <Col md={3}>
+                            <Form.Select
+                                value={selectedUser}
+                                onChange={(e) => setSelectedUser(e.target.value)}
+                            >
+                                <option value="">All Users</option>
+                                {users.map((user) => (
+                                    <option key={user.id} value={user.id}>
+                                        {user.first_name} {user.last_name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Col>
+
+                        <Col md={3}>
+                            <Form.Select
+                                value={selectedStatus}
+                                onChange={(e) => setSelectedStatus(e.target.value)}
+                            >
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </Form.Select>
+                        </Col>
+
+                        <Col md={2}>
                             <Button variant="success" onClick={() => handleShow(null)}>
                                 <FaPlus /> Create Account
                             </Button>

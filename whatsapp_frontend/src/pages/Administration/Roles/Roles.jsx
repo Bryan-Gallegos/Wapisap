@@ -33,19 +33,22 @@ const Roles = () => {
     const fetchRoles = async () => {
         try {
             const response = await getRoles();
-            setRoles(response.results);
+            setRoles(response.results || response); // ← fallback si no hay `.results`
         } catch (error) {
             console.error("Error obtaining roles.", error);
         }
     };
 
+
     const fetchUsers = async () => {
         try {
             const response = await getUsers();
-            setUsers(response.results);
+            const usersData = response.results || response;
+
+            setUsers(usersData);
 
             const countByRole = {};
-            response.results.forEach(user => {
+            usersData.forEach(user => {
                 countByRole[user.role] = (countByRole[user.role] || 0) + 1;
             });
             setRoleUserCount(countByRole);
@@ -55,7 +58,7 @@ const Roles = () => {
     };
 
     const handleShow = (role) => {
-        setSelectedRole(role || { name: "" }); 
+        setSelectedRole(role || { name: "" });
         setShow(true);
     };
 
@@ -127,9 +130,13 @@ const Roles = () => {
         setSubmitting(false);
     };
 
+    const filteredRoles = roles.filter((role) =>
+        role.name.toLowerCase().includes(search.toLowerCase())
+    );
+
     const indexOfLastRole = currentPage * rolesPerPage;
     const indexOfFirstRole = indexOfLastRole - rolesPerPage;
-    const currentRoles = roles.slice(indexOfFirstRole, indexOfLastRole);
+    const currentRoles = filteredRoles.slice(indexOfFirstRole, indexOfLastRole);
 
     return (
         <div className="roles-page">
@@ -188,9 +195,9 @@ const Roles = () => {
                         </tbody>
                     </Table>
 
-                    {/* Paginación */}
+                    {/* Pagination */}
                     <Pagination className="custom-pagination justify-content-center">
-                        {Array.from({ length: Math.ceil(roles.length / rolesPerPage) }, (_, index) => (
+                        {Array.from({ length: Math.ceil(filteredRoles.length / rolesPerPage) }, (_, index) => (
                             <Pagination.Item
                                 key={index + 1}
                                 active={index + 1 === currentPage}
