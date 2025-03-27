@@ -13,6 +13,7 @@ import WhatsaapAccount from "../pages/Administration/WhatsappAccount/WhatsappAcc
 import Messages from "../pages/Administration/Messages/Messages";
 import Permissions from "../pages/Administration/Permissions/Permissions";
 import Instances from "../pages/Administration/Instances/Instances";
+import Api from "../pages/Administration/Api/Api";
 
 const AppRouter = () => {
   return (
@@ -36,7 +37,7 @@ const AppRouter = () => {
       <Route path="/administration/messages" element={<Messages />} />
       <Route path="/administration/permissions" element={<Permissions />} />
       <Route path="/administration/instances" element={<Instances />} />
-      {/*<Route path="/administration/api" element={<Api />} />*/}
+      <Route path="/administration/api" element={<Api />} />
       
     </Routes>
   );
