@@ -214,13 +214,7 @@ export const getRecentInstances = async() => {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        //Check if response.data is an aray before using slice
-        if(Array.isArray(response.data)){
-            return response.data.slice(-5);
-        }else{
-            console.error("Unexpected format in getRecentInstances:", response.data);
-            return [];
-        }
+        return response.data.slice(-5);
     }catch(error){
         console.error("Error obtaining the latest instances", error.response?.data || error.message);
         return [];
@@ -237,13 +231,7 @@ export const getRecentUsers = async () => {
             headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Check if response.data is an array before using slice
-        if (Array.isArray(response.data)) {
-            return response.data.slice(-5);
-        } else {
-            console.error("Unexpected format in getRecentUsers:", response.data);
-            return []; // Returns an empty array if not the expected format
-        }
+        return response.data.slice(-5);
     } catch (error) {
         console.error("Error getting the last users", error.response?.data || error.message);
         return [];
