@@ -1,0 +1,90 @@
+.signup-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.signup-card {
+    display: flex;
+    width: 90%;
+    max-width: 1000px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.signup-left,
+.signup-right {
+    flex: 1;
+    padding: 40px;
+}
+
+.signup-left {
+    background-color: #fff;
+}
+
+.signup-right {
+    background: linear-gradient(to bottom right, #007bff, #00cfff);
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.signup-logo {
+    width: 70px;
+    margin: 0 auto 15px;
+}
+
+.signup-form .input-group {
+    margin-bottom: 15px;
+}
+
+.signup-form input,
+.signup-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.signup-button:hover {
+    background-color: #0056b3;
+}
+
+.description {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.login-redirect {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.login-redirect span {
+    color: #007bff;
+    cursor: pointer;
+    font-weight: 500;
+}

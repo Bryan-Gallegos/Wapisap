@@ -70,6 +70,17 @@ export const loginUser = async (credentials) => {
     }
 };
 
+// ✅ Register new user (Sign Up)
+export const registerUser = async (userData) => {
+    try {
+        const response = await api.post("users/", userData);
+        return response.data;
+    } catch (error) {
+        console.error("Error registering user", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // ✅ Function for obtaining the authenticated user profile
 export const getUserProfile = async () => {
     try {

@@ -1,51 +1,104 @@
-.login-container{
-    vertical-align: middle;
-    max-width: 40%;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 7px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f7f9fc;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.login-card {
+    display: flex;
+    width: 900px;
     background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-left {
+    flex: 1;
+    padding: 40px;
+}
+
+.login-right {
+    flex: 1;
+    background: linear-gradient(to bottom right, #007bff, #00c6ff);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    padding: 30px;
 }
 
-h2{
-    margin-bottom: 20px;
-}
-
-.login-input-group{
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.login-input-group label{
-    display: block;
+.login-bg h3 {
+    font-size: 28px;
     font-weight: bold;
 }
 
-.login-input-group input{
-    width: 90%;
-    padding: 8px;
-    align-content: center;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.login-bg p {
+    margin-top: 10px;
+    font-size: 16px;
 }
 
-.login-button{
-    width: 40%;
+h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.description {
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-form label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.login-form input {
+    width: 100%;
     padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+}
+
+.login-form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
     background-color: #007bff;
     color: white;
+    font-weight: bold;
     border: none;
-    border-radius: 7px;
-    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s;
 }
 
-.login-button:hover{
+.login-button:hover {
     background-color: #0056b3;
 }
 
-.error-message{
+.error-message {
     color: red;
+    margin-bottom: 15px;
+}
+
+.login-logo {
+    width: 80px;
+    height: auto;
     margin-bottom: 10px;
 }

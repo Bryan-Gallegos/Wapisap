@@ -21,7 +21,7 @@ const Home = () => {
                         <Button variant="primary" size="lg" onClick={() => navigate("/login")}>
                             Log In
                         </Button>
-                        <Button variant="dark" size="lg" onClick={() => navigate("/register")}>
+                        <Button variant="dark" size="lg" onClick={() => navigate("/signup")}>
                             Sign Up
                         </Button>
                     </div>

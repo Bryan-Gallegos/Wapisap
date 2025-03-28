@@ -3,6 +3,7 @@ import DashboardAdmin from "../pages/Dashboard/Admin/DashboardAdmin";
 import DashboardUser from "../pages/Dashboard/User/DashboardUser";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
+import SignUp from "../pages/SignUp/SignUp";
 import WhatsApp from "../pages/Whatsapp/Whatsapp";
 import Administration from "../pages/Administration/Administration";
 import Profile from "../pages/Profile/Profile";
@@ -20,6 +21,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
       {/* RUTAS PARA EL DASHBOARD */}
       <Route path="/dashboard/admin" element={<DashboardAdmin />} />
       <Route path="/dashboard/user" element={<DashboardUser />} />

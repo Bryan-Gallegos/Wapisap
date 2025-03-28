@@ -12,11 +12,6 @@ const DashboardLayout = ({ children }) => {
             <Sidebar />
             <div className="content">
             <Topbar />
-                <Navbar bg="light" className="shadow-sm">
-                    <Container>
-                        <Navbar.Brand className="mx-3">Dashboard</Navbar.Brand>
-                    </Container>
-                </Navbar>
                 <Container className="mt-4">{children}</Container>
             </div>
         </div>
