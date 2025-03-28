@@ -88,3 +88,12 @@
     cursor: pointer;
     font-weight: 500;
 }
+
+.success-message {
+    color: green;
+    background-color: #e0ffe0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}

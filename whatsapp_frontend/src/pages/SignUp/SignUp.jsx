@@ -28,7 +28,7 @@ const SignUp = () => {
         setError("");
 
         if (formData.password !== formData.confirmPassword) {
-            return setError("Passwords do not match.");
+            return setError("Las contraseñas no coinciden.");
         }
 
         try {
@@ -45,12 +45,12 @@ const SignUp = () => {
 
             if (response?.id) {
                 setSuccess(true);
-                setTimeout(() => navigate("/login"), 2500);
+                setTimeout(() => navigate("/login"), 2000); // Redirige tras 2s
             } else {
-                setError("Unexpected error when registering.");
+                setError("Error inesperado al registrar.");
             }
         } catch (err) {
-            setError("The user could not be created. Please verify your data.");
+            setError("No se pudo crear el usuario. Verifica tus datos.");
             console.error("SignUp error:", err);
         }
     };
@@ -63,7 +63,7 @@ const SignUp = () => {
                     <p className="description">Register to start using our platform.</p>
 
                     {error && <p className="error-message">{error}</p>}
-                    {success && <div className="modal-success">🎉 You were successfully registered</div>}
+                    {success && <p className="success-message">✅ You were successfully registered!</p>}
 
                     <form onSubmit={handleSubmit} className="signup-form">
                         <div className="input-group">
@@ -145,7 +145,8 @@ const SignUp = () => {
                         </button>
 
                         <p className="login-redirect">
-                            Already have an account? <span onClick={() => navigate("/login")}>Login</span>
+                            Already have an account?{" "}
+                            <span onClick={() => navigate("/login")}>Login</span>
                         </p>
                     </form>
                 </div>
