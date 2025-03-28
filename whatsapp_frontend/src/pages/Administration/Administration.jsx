@@ -64,7 +64,7 @@ const Administration = () => {
             <div className="admin-content">
                 <Topbar />
                 <Container fluid className="p-4">
-                    <h2>Admin Dashboard</h2>
+                    <h2>ADMINISTRATION</h2>
                     <p>System overview and general metrics.</p>
 
                     {/* Resumen de métricas */}

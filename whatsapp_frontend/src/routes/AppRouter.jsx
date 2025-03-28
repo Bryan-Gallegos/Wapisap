@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashboardAdmin from "../pages/Dashboard/Admin/DashboardAdmin";
 import DashboardUser from "../pages/Dashboard/User/DashboardUser";
+import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import WhatsApp from "../pages/Whatsapp/Whatsapp";
 import Administration from "../pages/Administration/Administration";
@@ -22,7 +23,7 @@ const AppRouter = () => {
       {/* RUTAS PARA EL DASHBOARD */}
       <Route path="/dashboard/admin" element={<DashboardAdmin />} />
       <Route path="/dashboard/user" element={<DashboardUser />} />
-      <Route path="" element={<Login />} />
+      <Route path="" element={<Home />} />
       {/* RUTAS PARA TODOS */}
       <Route path="/profile" element={<Profile />} />
       {/* RUTAS PARA EL USUARIO */}
