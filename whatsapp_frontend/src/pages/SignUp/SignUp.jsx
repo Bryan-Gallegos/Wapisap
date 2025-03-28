@@ -28,7 +28,7 @@ const SignUp = () => {
         setError("");
 
         if (formData.password !== formData.confirmPassword) {
-            return setError("Las contraseñas no coinciden.");
+            return setError("Passwords do not match.");
         }
 
         try {
@@ -45,12 +45,12 @@ const SignUp = () => {
 
             if (response?.id) {
                 setSuccess(true);
-                setTimeout(() => navigate("/login"), 2000); // Redirige tras 2s
+                navigate("/login");
             } else {
-                setError("Error inesperado al registrar.");
+                setError("Unexpected error when registering.");
             }
         } catch (err) {
-            setError("No se pudo crear el usuario. Verifica tus datos.");
+            setError("The user could not be created. Verify your data.");
             console.error("SignUp error:", err);
         }
     };
