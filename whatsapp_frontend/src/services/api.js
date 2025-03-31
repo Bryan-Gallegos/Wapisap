@@ -31,6 +31,9 @@ api.interceptors.response.use(
                 const newAccessToken = res.data.access;
                 localStorage.setItem("access_token", newAccessToken);
 
+                const isValid  = await verifyToken(newAccessToken);
+                if(!isValid) throw new Error("Invalid token after refresh");
+
                 // Update headers and repeat original request
                 api.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
                 originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
@@ -47,13 +50,40 @@ api.interceptors.response.use(
     }
 );
 
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("access_token");
+        if(token){
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// ✅ Verify token
+export const verifyToken = async (token) => {
+    try{
+        const response = await axios.post(`${API_BASE_URL}token/verify`,{
+            token,
+        });
+
+        return response.status === 200 || response.status === 201;
+    }catch (error){
+        console.error("Token verification failed", error.response?.data || error.message);
+        return false;
+    }
+};
+
 // ✅ Login function
 export const loginUser = async (credentials) => {
     try {
         const response = await axios.post(`${API_BASE_URL}token/`, credentials);
 
         const { access, refresh, user_id } = response.data;
-
+        
         localStorage.setItem("access_token", access);
         localStorage.setItem("refresh_token", refresh);
 

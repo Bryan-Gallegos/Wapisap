@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, SAFE_METHODS
 from .models import *
 from .serializers import *
 from rest_framework.response import Response
@@ -68,7 +68,11 @@ class PlanListCreateView(generics.ListCreateAPIView):
 class PlanRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
-    permission_classes = [IsAdminUser]  # Solo admins pueden modificar/eliminar planes
+    
+    def get_permissions(self):
+        if self.request.method in SAFE_METHODS:
+            return [IsAuthenticated()]
+        return[IsAdminUser()]
 
 # ===============================
 # CUENTAS DE WHATSAPP
