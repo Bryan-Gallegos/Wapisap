@@ -17,13 +17,16 @@ const WhatsApp = () => {
     const [chatbotSent, setChatbotSent] = useState(214);
     const [messageLimit, setMessageLimit] = useState(100000);
     const [apiMessages, setApiMessages] = useState(1);
-    const [sentBulkMessages, setSentBulkMessages] = useState(2);
+    const [sentBulkMessages, setSentBulkMessages] = useState(5);
     const [failedBulkMessages, setFailedBulkMessages] = useState(0);
-    const [messagesSent, setMessagesSent] = useState(chatbotSent + apiMessages);
     const [autoResponderSent, setAutoResponderSent] = useState(0);
     const [user, setUser] = useState(null);
     const [whatsAppAccounts, setWhatsAppAccounts] = useState([]);
+    const [sentCampaign, setSentCampaigns] = useState(1);
+    const [failedCampaign, setFailedCampaign] = useState(0);
+    const [totalMessagesCampaigns, setTotalMessagesCampaigns] = useState(sentCampaign + failedCampaign);
     const [totalBulkMessages, setTotalBulkMessages] = useState(sentBulkMessages + failedBulkMessages);
+    const [messagesSent, setMessagesSent] = useState(chatbotSent + apiMessages + totalBulkMessages + totalMessagesCampaigns + autoResponderSent);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -91,7 +94,7 @@ const WhatsApp = () => {
 
     // CAMPAIGNS
     const campaigns = [
-        { name: "Test Campaign", sent: 1, failed: 0 }
+        { name: "Test Campaign", sent: sentCampaign, failed: failedCampaign }
     ];
     const apiSent = apiMessages;
 
