@@ -6,18 +6,22 @@
 
 /* WhatsApp Menu fijo */
 .whatsapp-menu-container {
-    width: 250px;  /* Ajuste del ancho */
+    width: 250px;
+    /* Ajuste del ancho */
     height: 100vh;
     position: fixed;
-    left: 55px;  /* Justo al lado del Sidebar */
-    top: 0;  /* Asegura que inicie desde la parte superior */
+    left: 55px;
+    /* Justo al lado del Sidebar */
+    top: 0;
+    /* Asegura que inicie desde la parte superior */
     background-color: #ffffff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     padding: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;  /* Evitar que los elementos suban */
+    justify-content: flex-start;
+    /* Evitar que los elementos suban */
     z-index: 99;
 }
 
@@ -31,18 +35,24 @@
     border-radius: 8px;
 }
 
-.whatsapp-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+.group-text-percent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.whatsapp-card:hover {
-    transform: translateY(-5px);
+.group-text-percent span:first-child {
+    margin-right: auto;
+    /* Empuja el segundo span a la derecha */
 }
 
-.whatsapp-card h3 {
-    font-size: 2rem;
-    margin-top: 10px;
-    font-weight: bold;
+.group-text-percent span:last-child {
+    margin-left: auto;
+    /* Asegura que se quede a la derecha */
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
 }
