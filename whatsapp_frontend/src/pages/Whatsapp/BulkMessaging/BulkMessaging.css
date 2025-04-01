@@ -1,0 +1,37 @@
+.whatsapp-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* WhatsApp Menu fijo */
+.whatsapp-menu-container {
+    width: 250px;
+    /* Ajuste del ancho */
+    height: 100vh;
+    position: fixed;
+    left: 55px;
+    /* Justo al lado del Sidebar */
+    top: 0;
+    /* Asegura que inicie desde la parte superior */
+    background-color: #ffffff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Evitar que los elementos suban */
+    z-index: 99;
+}
+
+/* Ajuste del contenido */
+.bulk-messaging-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    overflow-x: hidden;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 100vh;
+}
