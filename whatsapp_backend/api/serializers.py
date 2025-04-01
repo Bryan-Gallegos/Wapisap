@@ -9,7 +9,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'plan', 'expire_date']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'plan', 'expire_date','access_token']
         extra_kwargs = {
             'password': {'write_only': True},
             'is_staff': {'read_only': True}, # No permitir que el frontend modifique estos valores directamente

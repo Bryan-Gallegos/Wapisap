@@ -16,6 +16,7 @@ import Messages from "../pages/Administration/Messages/Messages";
 import Permissions from "../pages/Administration/Permissions/Permissions";
 import Instances from "../pages/Administration/Instances/Instances";
 import Api from "../pages/Administration/Api/Api";
+import WhatsAppProfile from "../pages/Whatsapp/Profiles/Profiles";
 
 const AppRouter = () => {
   return (
@@ -30,6 +31,7 @@ const AppRouter = () => {
       <Route path="/profile" element={<Profile />} />
       {/* RUTAS PARA EL USUARIO */}
       <Route path="/whatsapp" element={<WhatsApp />} />
+      <Route path="/whatsapp_profile" element={<WhatsAppProfile />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
