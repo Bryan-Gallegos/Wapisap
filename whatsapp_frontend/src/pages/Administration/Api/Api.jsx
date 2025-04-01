@@ -1239,6 +1239,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ],
         },
         {
@@ -1254,6 +1255,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ],
             responseModel: [
                 { field: "id", type: "integer" },
@@ -1265,6 +1267,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ],
         },
         {
@@ -1284,6 +1287,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ]
         },
         {
@@ -1299,6 +1303,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ],
             responseModel: [
                 { field: "id", type: "integer" },
@@ -1310,6 +1315,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ]
         },
         {
@@ -1325,6 +1331,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ],
             responseModel: [
                 { field: "id", type: "integer" },
@@ -1336,6 +1343,7 @@ const apiData = {
                 { field: "role", type: "integer" },
                 { field: "plan", type: "integer" },
                 { field: "expire_date", type: "string($date)" },
+                { field: "access_token", type: "string"},
             ]
         },
         {
