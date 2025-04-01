@@ -32,3 +32,12 @@
     display: flex;
     align-items: center;
 }
+
+.big-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.text-danger {
+    color: #ff4d6d !important; /* rojo más llamativo */
+}

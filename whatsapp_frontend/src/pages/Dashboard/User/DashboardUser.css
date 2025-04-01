@@ -1,0 +1,29 @@
+.dashboard-page {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.user-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    overflow-x: hidden;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.group-text-percent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.group-text-percent span:first-child {
+    margin-right: auto;
+}
+
+.group-text-percent span:last-child {
+    margin-left: auto;
+}

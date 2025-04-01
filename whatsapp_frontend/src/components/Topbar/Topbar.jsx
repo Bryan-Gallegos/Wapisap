@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Container, Button, Dropdown, Image } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
-import { getUserProfile } from "../../services/api"; // Importa la función de la API
+import { getUserProfile } from "../../services/api";
 import "./Topbar.css";
 
 const Topbar = () => {
@@ -12,7 +12,7 @@ const Topbar = () => {
         localStorage.setItem("language", language);
     }, [language]);
 
-    // Obtener datos del usuario al cargar el componente
+    // Get user data when loading the component
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
@@ -22,7 +22,7 @@ const Topbar = () => {
                 console.error("Error al obtener el perfil del usuario", error);
             }
         };
-        
+
         fetchUserProfile();
     }, []);
 
@@ -39,9 +39,9 @@ const Topbar = () => {
         window.location.href = "/login";
     };
 
-    // Obtener iniciales correctamente usando first_name y last_name
+    // Get initials correctly using first_name and last_name
     const getUserInitials = () => {
-        if (!userProfile) return "NN"; // En caso de que no haya usuario autenticado
+        if (!userProfile) return "NN"; 
         const { first_name, last_name } = userProfile;
         if (!first_name || !last_name) return "NN";
 
@@ -51,8 +51,8 @@ const Topbar = () => {
     return (
         <Navbar bg="light" expand="lg" className="topbar shadow-sm px-3">
             <Container fluid className="d-flex align-items-center justify-content-end text-end">
-                
-                {/* Selector de idioma */}
+
+                {/* Language selector */}
                 <Dropdown className="me-2">
                     <Dropdown.Toggle variant="light" id="dropdown-language" className="d-flex align-items-center small-text">
                         <img
@@ -72,23 +72,35 @@ const Topbar = () => {
                     </Dropdown.Menu>
                 </Dropdown>
 
-                {/* 📌 Mostrar Fecha de Expiración del Plan */}
-                <span className="me-2 big-text">
-                    Expire date: <strong>{userProfile?.expire_date || "Forever"}</strong>
-                </span>
+                {/* 📌 Display Plan Expiration Date */}
+                {userProfile?.expire_date ? (
+                    new Date(userProfile.expire_date) < new Date() ? (
+                        <span className="me-2 big-text text-danger">
+                            Subscription has expired
+                        </span>
+                    ) : (
+                        <span className="me-2 big-text">
+                            Expire date: <strong>{userProfile.expire_date}</strong>
+                        </span>
+                    )
+                ) : (
+                    <span className="me-2 big-text">
+                        Expire date: <strong>Forever</strong>
+                    </span>
+                )}
 
-                {/* Botón Upgrade */}
+                {/* Upgrade button */}
                 <Button variant="primary" className="me-2 small-btn">Upgrade</Button>
 
-                {/* Botón de perfil con Dropdown */}
+                {/* Profile button with Dropdown */}
                 <Dropdown>
                     <Dropdown.Toggle variant="primary" id="dropdown-profile" className="small-btn d-flex align-items-center">
                         {userProfile?.profile_picture ? (
-                            <Image 
-                                src={userProfile.profile_picture} 
-                                alt="User Profile" 
-                                roundedCircle 
-                                width="30" 
+                            <Image
+                                src={userProfile.profile_picture}
+                                alt="User Profile"
+                                roundedCircle
+                                width="30"
                                 height="30"
                                 className="me-1"
                             />
