@@ -1,0 +1,49 @@
+/* Ajuste del contenido */
+.whatsapp-quickresponse-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    overflow-x: hidden;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 100vh;
+}
+
+.whatsapp-quickresponse-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9fb;
+}
+
+.quickresponse-box textarea {
+    resize: none;
+}
+
+/* Scroll solo cuando se abre el desplegable */
+select.country-select-scroll {
+    /* forzamos a mostrar el scroll al abrir */
+    scrollbar-width: auto;
+    /* Firefox */
+    -ms-overflow-style: auto;
+    /* IE 10+ */
+}
+
+select.country-select-scroll option {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Estilo del desplegable solo cuando está abierto */
+select.country-select-scroll:focus {
+    overflow-y: auto;
+}
+
+/* SOLO mostrar 6 items como máximo en el dropdown (depende del sistema operativo) */
+select.country-select-scroll:focus-visible {
+    height: auto;
+}
+
+select.country-select-scroll[size="5"] {
+    overflow-y: auto;
+}
