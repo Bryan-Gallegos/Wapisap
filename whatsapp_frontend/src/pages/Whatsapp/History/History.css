@@ -1,0 +1,33 @@
+/* Ajuste del contenido */
+.whatsaap-history-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    overflow-x: hidden;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 100vh;
+}
+
+.whatsapp-history-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9fb;
+}
+
+.table-responsive {
+    border-radius: 8px;
+}
+
+.text-purple {
+    color: #AA00FF;
+}
+
+.fixed-size-table th,
+.fixed-size-table td {
+    vertical-align: middle;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

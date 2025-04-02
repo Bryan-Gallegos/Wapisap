@@ -5,18 +5,37 @@ import { FaSearch, FaPlus, FaFileExcel, FaEnvelope } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Topbar from "../../../components/Topbar/Topbar";
 import WhatsappMenu from "../../../components/WhatsAppMenu/WhatsAppMenu";
+import { getUserProfile } from "../../../services/api";
 import empty from "../../../assets/empty.png";
 import "./BulkMessaging.css";
 
 const BulkMessaging = () => {
     const [bulkMessages, setBulkMessages] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
+        const fetchData = async () => {
+            try{
+                const userData = await getUserProfile();
+                setUser(userData);
+
+                const today = new Date();
+                const expireDate = new Date(userData.expire_date);
+                if (expireDate < today) {
+                    navigate("/dashboard/user");
+                    return;
+                }
+            }catch (error) {
+                console.error("Error fetching user/accounts:", error);
+            }
+        };
+
+        fetchData();
         // Aquí puedes cargar los mensajes desde la API si deseas
         // setBulkMessages([...]);
-    }, []);
+    }, [navigate]);
 
     const handleCreate = () => {
         navigate("/whatsapp_bulk/create");

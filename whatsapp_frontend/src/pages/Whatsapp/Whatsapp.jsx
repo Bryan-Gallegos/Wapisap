@@ -39,7 +39,7 @@ const WhatsApp = () => {
                 const today = new Date();
 
                 if (expireDate < today) {
-                    navigate("/dashborad/user"); // Expired
+                    navigate("/dashboard/user"); // Expired
                     return;
                 }
 

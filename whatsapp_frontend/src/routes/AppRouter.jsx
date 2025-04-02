@@ -19,6 +19,7 @@ import Api from "../pages/Administration/Api/Api";
 import WhatsAppProfile from "../pages/Whatsapp/Profiles/Profiles";
 import BulkMessaging from "../pages/Whatsapp/BulkMessaging/BulkMessaging";
 import CreateBulkMessaging from "../pages/Whatsapp/BulkMessaging/CreateBulkMessaging/CreateBulkMessaging";
+import WhatsAppHistory from "../pages/Whatsapp/History/History";
 
 const AppRouter = () => {
   return (
@@ -36,6 +37,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_profile" element={<WhatsAppProfile />} />
       <Route path="/whatsapp_bulk" element={<BulkMessaging />} />
       <Route path="/whatsapp_bulk/create" element={<CreateBulkMessaging />} />
+      <Route path="/whatsapp_history" element={<WhatsAppHistory />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
