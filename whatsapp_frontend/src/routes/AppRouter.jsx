@@ -20,6 +20,7 @@ import WhatsAppProfile from "../pages/Whatsapp/Profiles/Profiles";
 import BulkMessaging from "../pages/Whatsapp/BulkMessaging/BulkMessaging";
 import CreateBulkMessaging from "../pages/Whatsapp/BulkMessaging/CreateBulkMessaging/CreateBulkMessaging";
 import WhatsAppHistory from "../pages/Whatsapp/History/History";
+import WhatsAppAutoresponder from "../pages/Whatsapp/AutoResponder/AutoResponder";
 
 const AppRouter = () => {
   return (
@@ -38,6 +39,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_bulk" element={<BulkMessaging />} />
       <Route path="/whatsapp_bulk/create" element={<CreateBulkMessaging />} />
       <Route path="/whatsapp_history" element={<WhatsAppHistory />} />
+      <Route path="/whatsapp_autoresponder" element={<WhatsAppAutoresponder />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
