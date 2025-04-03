@@ -851,4 +851,40 @@ export const deleteInstance = async (instanceId) => {
     }
 };
 
+// ✅ Obtaining all chatbot items
+export const getChatbotItems = async () => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.get("chatbot-items",{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error getting chatbot items", error.response?.data || error.message);
+    }
+};
+
+// ✅ Obtaining all chatbot settings
+export const getChatbotSettings = async () => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.get("chatbot-settings",{
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error getting chatbot settings", error.response?.data || error.message);
+    }
+};
+
 export default api;

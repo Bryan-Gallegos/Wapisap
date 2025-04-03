@@ -22,6 +22,7 @@ import CreateBulkMessaging from "../pages/Whatsapp/BulkMessaging/CreateBulkMessa
 import WhatsAppHistory from "../pages/Whatsapp/History/History";
 import WhatsAppAutoresponder from "../pages/Whatsapp/AutoResponder/AutoResponder";
 import WhatsAppQuickResponse from "../pages/Whatsapp/QuickResponse/QuickResponse";
+import WhatsAppChatbot from "../pages/Whatsapp/Chatbot/Chatbot";
 
 const AppRouter = () => {
   return (
@@ -42,6 +43,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_history" element={<WhatsAppHistory />} />
       <Route path="/whatsapp_autoresponder" element={<WhatsAppAutoresponder />} />
       <Route path="/whatsapp_send_message" element={<WhatsAppQuickResponse />} />
+      <Route path="/whatsapp_chatbot" element={<WhatsAppChatbot />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
