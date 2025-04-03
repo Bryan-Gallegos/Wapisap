@@ -14,7 +14,9 @@ const QuickResponse = () => {
     const [user, setUser] = useState(null);
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
-    const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+    const [selectedCountry, setSelectedCountry] = useState(() =>
+        countries.find(c => c.isoCode === "PE") || countries[0]
+      );
     const countrySelectRef = useRef(null);
     const [selectSize, setSelectSize] = useState(1); // Controla el tamaño del select
     const navigate = useNavigate();
@@ -43,6 +45,15 @@ const QuickResponse = () => {
 
         fetchData();
     }, [navigate]);
+
+    const getEmojiFlag = (countryCode) => {
+        const codePoints = countryCode
+          .toUpperCase()
+          .split("")
+          .map(char => 127397 + char.charCodeAt());
+        return String.fromCodePoint(...codePoints);
+      };
+      
 
     return (
         <div className="whatsapp-quickresponse-page">
@@ -86,19 +97,19 @@ const QuickResponse = () => {
                                     <Form.Label>Send Message to</Form.Label>
                                     <div className="input-group" style={{ position: "relative" }}>
 
-                                        {/* Bandera que abre el select */}
+                                        {/* Flag that opens the select */}
                                         <span
                                             className="input-group-text"
                                             style={{ padding: "4px 10px", cursor: "pointer", zIndex: 3 }}
                                             onClick={() => {
                                                 if (countrySelectRef.current) {
-                                                    countrySelectRef.current.style.display = "block"; // mostrar
+                                                    countrySelectRef.current.style.display = "block"; 
                                                     countrySelectRef.current.focus();
                                                 }
                                             }}
                                         >
                                             <img
-                                                src={selectedCountry.flag}
+                                                src={`https://flagcdn.com/w40/${selectedCountry.isoCode.toLowerCase()}.png`}
                                                 alt={selectedCountry.isoCode}
                                                 width={24}
                                                 height={16}
@@ -106,18 +117,18 @@ const QuickResponse = () => {
                                             />
                                         </span>
 
-                                        {/* Input del número */}
+                                        {/* Number input */}
                                         <Form.Control
                                             type="text"
                                             placeholder={selectedCountry.example}
                                             onFocus={() => {
                                                 if (countrySelectRef.current) {
-                                                    countrySelectRef.current.style.display = "none"; // ocultar select si escribe
+                                                    countrySelectRef.current.style.display = "none"; 
                                                 }
                                             }}
                                         />
 
-                                        {/* Select real con scroll limitado a 5 */}
+                                        {/* Select real with scroll limited to 5 */}
                                         <select
                                             ref={countrySelectRef}
                                             size={5}
@@ -126,14 +137,14 @@ const QuickResponse = () => {
                                             onChange={(e) => {
                                                 const selected = countries.find(c => c.isoCode === e.target.value);
                                                 setSelectedCountry(selected);
-                                                countrySelectRef.current.style.display = "none"; // ocultar después de seleccionar
+                                                countrySelectRef.current.style.display = "none"; 
                                             }}
                                             onBlur={() => {
-                                                countrySelectRef.current.style.display = "none"; // ocultar si hace blur
+                                                countrySelectRef.current.style.display = "none"; 
                                             }}
                                             style={{
                                                 position: "absolute",
-                                                top: "42px", // 🔥 Ajuste para que se muestre debajo del input
+                                                top: "42px", 
                                                 left: "0",
                                                 zIndex: 999,
                                                 width: "30%",
@@ -142,7 +153,7 @@ const QuickResponse = () => {
                                         >
                                             {countries.map((country, i) => (
                                                 <option key={`${country.isoCode}-${i}`} value={country.isoCode}>
-                                                    {country.name} ({country.dialCode})
+                                                    {`${getEmojiFlag(country.isoCode)} ${country.name} (${country.dialCode})`}
                                                 </option>
                                             ))}
                                         </select>
