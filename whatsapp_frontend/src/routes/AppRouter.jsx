@@ -46,6 +46,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_send_message" element={<WhatsAppQuickResponse />} />
       <Route path="/whatsapp_chatbot" element={<WhatsAppChatbot />} />
       <Route path="/whatsapp_link_generator" element={<WhatsAppLinkGenerator />} />
+      <Route path="/whatsapp_api" element={<Api />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
