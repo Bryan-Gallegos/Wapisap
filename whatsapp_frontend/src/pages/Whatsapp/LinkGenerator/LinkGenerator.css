@@ -1,0 +1,29 @@
+.whatsapp-linkgenerator-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fb;
+}
+
+.whatsapp-linkgenerator-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    padding: 20px;
+    background-color: #fefefe;
+    min-height: 100vh;
+}
+
+.link-generator-card textarea {
+    resize: none;
+}
+
+.link-generator-card input {
+    font-size: 14px;
+}
+
+.empty-box img {
+    opacity: 0.6;
+}
+
+#qr-code canvas {
+    border-radius: 8px;
+}
