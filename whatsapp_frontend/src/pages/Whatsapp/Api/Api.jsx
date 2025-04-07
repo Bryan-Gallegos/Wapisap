@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Accordion, Card, Button, Table } from "react-bootstrap";
-import { FaPlug } from "react-icons/fa";
+import { FaCogs } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Topbar from "../../../components/Topbar/Topbar";
 
@@ -1484,7 +1484,7 @@ const Api = () => {
                 <Topbar />
                 <Container fluid className="p-4">
                     <h2>
-                        <FaPlug color="#FF6F00" /> API
+                        <FaCogs color="#FF6F00" /> API
                     </h2>
 
                     {Object.entries(apiData).map(([groupName, endpoints]) => (

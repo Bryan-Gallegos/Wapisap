@@ -6,6 +6,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import Topbar from "../../../components/Topbar/Topbar";
 import WhatsappMenu from "../../../components/WhatsAppMenu/WhatsAppMenu";
 import { getUserProfile, getWhatsAppAccounts } from "../../../services/api";
+import { FaLink } from "react-icons/fa";
 import emptyBox from "../../../assets/empty.png";
 import "./LinkGenerator.css";
 
@@ -86,7 +87,7 @@ const WhatsAppLinkGenerator = () => {
             <div className="whatsapp-linkgenerator-content">
                 <Topbar />
                 <Container className="p-4">
-                    <h4 className="fw-bold mb-2 text-success">📶 Link Generator</h4>
+                    <h4 className="fw-bold mb-2 text-success"><FaLink color="#50A1E8" /> Link Generator</h4>
                     <p className="text-muted mb-4">Create QR and links for WhatsApp</p>
 
                     <select

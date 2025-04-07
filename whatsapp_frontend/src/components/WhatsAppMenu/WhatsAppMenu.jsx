@@ -14,7 +14,6 @@ const menuItems = [
     { icon: <FaRobot className="icon autoresponder-icon" />, text: "Autoresponder", desc: "Send a pre-written message", link: "/whatsapp_autoresponder" },
     { icon: <FaCheckCircle className="icon quick-icon" />, text: "Quick Response", desc: "Quick Response", link: "/whatsapp_send_message" },
     { icon: <FaUsers className="icon chatbot-icon" />, text: "Chatbot", desc: "Communicate with users", link: "/whatsapp_chatbot" },
-    { icon: <FaCheckCircle className="icon export-icon" />, text: "Export Participants", desc: "Export participant list", link: "/whatsapp_export_participants" },
     { icon: <FaLink className="icon link-icon" />, text: "Link Generator", desc: "Create QR and links for WhatsApp", link: "/whatsapp_link_generator" },
     { icon: <FaCogs className="icon api-icon" />, text: "API", desc: "API WhatsApp REST", link: "/whatsapp_api" }
 ];
