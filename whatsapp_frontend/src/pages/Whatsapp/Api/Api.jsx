@@ -3,7 +3,8 @@ import { Container, Row, Accordion, Card, Button, Table } from "react-bootstrap"
 import { FaPlug } from "react-icons/fa";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Topbar from "../../../components/Topbar/Topbar";
-import AdminMenu from "../../../components/AdminMenu/AdminMenu";
+
+import WhatsappMenu from "../../../components/WhatsAppMenu/WhatsAppMenu";
 import "./Api.css";
 
 
@@ -1474,12 +1475,12 @@ const Api = () => {
     };
 
     return (
-        <div className="api-page">
+        <div className="whatsapp-api-page">
             <Sidebar />
-            <div className="admin-menu-container">
-                <AdminMenu />
+            <div className="user-menu-container">
+                <WhatsappMenu />
             </div>
-            <div className="admin-content">
+            <div className="whatsapp-api-content">
                 <Topbar />
                 <Container fluid className="p-4">
                     <h2>
