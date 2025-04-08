@@ -1,0 +1,73 @@
+.whatsapp-polltemplate-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fb;
+}
+
+.whatsapp-polltemplate-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    padding: 20px;
+    background-color: #fefefe;
+    min-height: 100vh;
+}
+
+.poll-template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.poll-template-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.poll-template-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    margin-left: 8px;
+    font-size: 14px;
+    background-color: transparent;
+}
+
+.search-icon {
+    color: #888;
+}
+
+.add-button {
+    background-color: #e7f0ff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1976d2;
+}
+
+.empty-container {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.empty-image {
+    width: 140px;
+    opacity: 0.8;
+}

@@ -110,7 +110,6 @@ const Topbar = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu align="end">
                         <Dropdown.Item href="/profile">My Account</Dropdown.Item>
-                        <Dropdown.Item href="/settings">Configuration</Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item href="#" onClick={handleLogout} className="text-danger">
                             Logout
