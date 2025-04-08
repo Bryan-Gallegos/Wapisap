@@ -212,3 +212,34 @@ class PermissionsByPlanView(APIView):
         permissions = PlanPermission.objects.filter(plan_id=plan_id)
         serializer = PlanPermissionSerializer(permissions, many=True)
         return Response(serializer.data)
+    
+# ===============================
+# GRUPOS DE CONTACTOS
+# ===============================
+class ContactGroupListCreateView(generics.ListCreateAPIView):
+    queryset = ContactGroup.objects.all()
+    serializer_class = ContactGroupSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ContactGroupRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ContactGroup.objects.all()
+    serializer_class = ContactGroupSerializer
+    permission_classes = [IsAuthenticated]
+
+# ===============================
+# CONTACTOS
+# ===============================
+class ContactListCreateView(generics.ListCreateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class ContactRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    permission_classes = [IsAuthenticated]

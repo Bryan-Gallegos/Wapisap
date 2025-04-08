@@ -226,3 +226,37 @@ class Billing(models.Model):
 
     def __str__(self):
         return f"Billing for {self.user.username}"
+    
+# ==========================
+# MODELO DE GRUPO DE CONTACTOS
+# ==========================
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class ContactGroup(models.Model):
+    STATUS_CHOICES = [
+        ('enable', 'Enable'),
+        ('disable', 'Disable')
+    ]
+
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='enable')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_groups')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.user.username})"
+    
+# ==========================
+# MODELO DE CONTACTOS
+# ==========================
+class Contact(models.Model):
+    group = models.ForeignKey(ContactGroup, on_delete=models.CASCADE, related_name='contacts')
+    phone_number = models.CharField(max_length=20)
+    is_valid = models.BooleanField(default=False)
+    params = models.JSONField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__ (self):
+        return f"{self.phone_number} - {'Valid' if self.is_valid else 'Invalid'}"

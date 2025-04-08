@@ -26,7 +26,7 @@ import WhatsAppChatbot from "../pages/Whatsapp/Chatbot/Chatbot";
 import WhatsAppLinkGenerator from "../pages/Whatsapp/LinkGenerator/LinkGenerator";
 import WhatsAppApi from "../pages/Whatsapp/Api/Api";
 import WhatsAppPollTemplate from "../pages/Whatsapp/PollTemplate/PollTemplate";
-
+import WhatsAppContacts from "../pages/Whatsapp/Contacts/Contacts";
 const AppRouter = () => {
   return (
     <Routes>
@@ -50,6 +50,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_link_generator" element={<WhatsAppLinkGenerator />} />
       <Route path="/whatsapp_api" element={<WhatsAppApi />} />
       <Route path="/whatsapp_poll_template" element={<WhatsAppPollTemplate />} />
+      <Route path="/whatsapp_contact" element={<WhatsAppContacts />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />

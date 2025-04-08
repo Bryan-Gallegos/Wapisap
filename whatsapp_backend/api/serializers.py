@@ -191,3 +191,19 @@ class PlanPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlanPermission
         fields = ['id', 'plan', 'permission', 'permission_id']
+
+# ===============================
+# GRUPOS DE CONTACTOS
+# ===============================
+class ContactGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactGroup
+        fields = ['id', 'name', 'status', 'user', 'created_at']
+
+# ===============================
+# CONTACTOS INDIVIDUALES
+# ===============================
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['id', 'group', 'phone_number', 'is_valid', 'params', 'created_at']

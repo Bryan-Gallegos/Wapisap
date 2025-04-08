@@ -1,0 +1,198 @@
+.whatsapp-contacts-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fb;
+}
+
+.whatsapp-contacts-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    padding: 20px 30px;
+    background-color: #fefefe;
+    min-height: 100vh;
+}
+
+.contacts-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 6px 10px;
+    min-width: 200px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    margin-left: 8px;
+    font-size: 14px;
+    background-color: transparent;
+}
+
+.search-icon {
+    color: #999;
+}
+
+.add-button {
+    background-color: #1976d2;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #125ea5;
+}
+
+/* === Tabla === */
+.contacts-table-wrapper {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    max-width: 1100px;              /* Limita el ancho total de la tabla */
+    margin: 0 auto;                 /* Centra horizontalmente */
+}
+
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.contacts-table thead tr {
+    background-color: #f9f9f9;
+}
+
+.contacts-table th,
+.contacts-table td {
+    padding: 12px 8px;
+    font-size: 13px;
+    color: #444;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.contacts-table th {
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.contacts-table th:first-child,
+.contacts-table td:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.contacts-table th:nth-child(2),
+.contacts-table td:nth-child(2) {
+    width: 220px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.contacts-table th:nth-child(n+3):nth-child(-n+8),
+.contacts-table td:nth-child(n+3):nth-child(-n+8) {
+    text-align: center;
+    width: 80px;
+}
+
+.contacts-table td:last-child {
+    width: 120px;
+    text-align: center;
+}
+
+.contacts-table th span.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Status colors */
+.status.total {
+    color: #2196f3;
+}
+.status.valid {
+    color: #4caf50;
+}
+.status.invalid {
+    color: #f44336;
+}
+.status.validating {
+    color: #03a9f4;
+}
+.status.duplicate {
+    color: #ffc107;
+}
+
+.contacts-table thead {
+    background-color: #f9f9f9;
+}
+
+.contacts-table th span.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+}
+
+.status.total {
+    color: #2196f3;
+}
+.status.valid {
+    color: #4caf50;
+}
+.status.invalid {
+    color: #f44336;
+}
+.status.validating {
+    color: #03a9f4;
+}
+.status.duplicate {
+    color: #ffc107;
+}
+
+.no-data-cell {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.empty-image {
+    width: 120px;
+    opacity: 0.7;
+    margin: auto;
+    display: block;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 15px;
+    transition: transform 0.2s;
+}
+
+.icon-button:hover {
+    transform: scale(1.1);
+}

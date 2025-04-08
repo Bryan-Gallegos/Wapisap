@@ -887,4 +887,151 @@ export const getChatbotSettings = async () => {
     }
 };
 
+// ✅ Obtaining all contact groups
+export const getContactGroups = async () => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.get("contact-groups", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error getting contact groups", error.response?.data || error.message);
+    }
+};
+
+// ✅ Create contact group
+export const createContactGroup = async (data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.post("contact-groups/", data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error creating contact group", error.response?.data || error.message);
+    }
+};
+
+// ✅ Updating an existing contact group
+export const updateContactGroup = async (groupId, data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.put(`contact-groups/${groupId}/`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating contact group", error.response?.data || error.message);
+    }
+};
+
+// ✅ Deleting a contact group
+export const deleteContactGroup = async (groupId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        await api.delete(`contact-groups/${groupId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting contact group", error.response?.data || error.message);
+        return false;
+    }
+};
+
+// ✅ Obtaining all contacts
+export const getContacts = async () => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.get("contacts", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch(error){
+        console.error("Error getting contacts", error.response?.data || error.message);
+    }
+}
+
+// ✅ Create a contact
+export const createContact = async (data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.post("contacts/", data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error creating contact", error.response?.data || error.message);
+    }
+};
+
+// ✅ Updating and existing contact
+export const updateContact = async (contactId, data) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.put(`contacts/${contactId}/`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error updating contact", error.response?.data || error.message);
+    }
+};
+
+// ✅ Delete a contact
+export const deleteContact = async (contactId) => {
+    try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        await api.delete(`contacts/${contactId}/`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting contact", error.response?.data || error.message);
+        return false;
+    }
+};
+
+
 export default api;
