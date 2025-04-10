@@ -140,7 +140,7 @@ const Contacts = () => {
                                                             <button className="icon-button" title="Edit" onClick={() => navigate(`edit/${group.id}`)}>
                                                                 <i className="fas fa-edit" style={{ color: "#333" }}></i>
                                                             </button>
-                                                            <button className="icon-button" title="Contacts">
+                                                            <button className="icon-button" title="Contacts" onClick={() => navigate(`${group.id}/contacts`)}>
                                                                 <i className="fas fa-list" style={{ color: "#666" }}></i>
                                                             </button>
                                                             <button className="icon-button" title="Delete" onClick={() => handleDelete(group)}>

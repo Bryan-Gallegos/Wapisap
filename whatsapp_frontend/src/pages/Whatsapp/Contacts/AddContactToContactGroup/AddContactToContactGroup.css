@@ -1,0 +1,211 @@
+.whatsapp-addcontact-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8f9fb;
+}
+
+.whatsapp-addcontact-content {
+    margin-left: 305px;
+    width: calc(100% - 305px);
+    padding: 20px 30px;
+    background-color: #fefefe;
+    min-height: 100vh;
+}
+
+.contact-group-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-wrapper {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.contact-table-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    margin-top: 15px;
+}
+
+.contact-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 14px;
+}
+
+.contact-table th,
+.contact-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+}
+
+.contact-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    font-size: 12px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.empty-image {
+    width: 120px;
+    margin: 0 auto;
+}
+
+.no-data-cell {
+    text-align: center;
+    padding: 30px;
+}
+
+.pagination-wrapper {
+    margin-top: 20px;
+}
+
+.import-tabs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.import-tabs button {
+    flex: 1;
+    border: none;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 10px 0;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.import-tabs button.active {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.csv-upload-tab .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.form-upload-tab textarea {
+    background: #f7f9fb;
+    font-size: 13px;
+    font-family: monospace;
+    color: #999;
+    padding: 10px;
+    resize: none;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.import-modal .modal-content {
+    border-radius: 10px;
+    padding: 25px 20px;
+    border: none;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.import-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 20px; /* <-- Espacio entre título y contenido */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.import-modal .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.import-modal .modal-body {
+    padding-top: 10px;
+}
+
+.import-modal .tab-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.import-modal .tab-buttons button {
+    flex: 1;
+    border-radius: 5px 5px 0 0;
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.import-modal .tab-buttons .active {
+    background-color: #007bff;
+    color: white;
+}
+
+.import-modal .tab-buttons button:not(.active) {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.import-modal .csv-upload-section,
+.import-modal .form-upload-section {
+    padding: 15px 0;
+}
+
+.import-modal .example-template {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.import-modal textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    background-color: #f7fafd;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    resize: none;
+    font-size: 13px;
+    color: #333;
+}
+
+.import-modal .modal-footer {
+    border-top: none;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+}

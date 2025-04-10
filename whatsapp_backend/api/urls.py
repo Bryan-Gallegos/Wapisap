@@ -89,6 +89,6 @@ urlpatterns = [
     path('contact-groups/<int:pk>/', ContactGroupRetrieveUpdateDeleteView.as_view(), name='contact-groups-detail'),
 
     #Group
-    path('contacts/', ContactGroupListCreateView.as_view(), name='contacts-list'),
+    path('contacts/', ContactListCreateView.as_view(), name='contacts-list'),
     path('contacts/<int:pk>/', ContactRetrieveUpdateDeleteView.as_view(), name='contacts-detail'),
 ]

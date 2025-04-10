@@ -29,6 +29,7 @@ import WhatsAppPollTemplate from "../pages/Whatsapp/PollTemplate/PollTemplate";
 import WhatsAppContacts from "../pages/Whatsapp/Contacts/Contacts";
 import CreateContactGroup from "../pages/Whatsapp/Contacts/CreateContactGroup/CreateContactGroup";
 import EditContactGroup from "../pages/Whatsapp/Contacts/EditContactGroup/EditContactGroup";
+import AddContactToContactGroup from "../pages/Whatsapp/Contacts/AddContactToContactGroup/AddContactToContactGroup";
 const AppRouter = () => {
   return (
     <Routes>
@@ -55,6 +56,7 @@ const AppRouter = () => {
       <Route path="/whatsapp_contact" element={<WhatsAppContacts />} />
       <Route path="/whatsapp_contact/create" element={<CreateContactGroup />} />
       <Route path="/whatsapp_contact/edit/:id" element={<EditContactGroup />} />
+      <Route path="/whatsapp_contact/:groupId/contacts" element={<AddContactToContactGroup />} />
       {/* RUTAS PARA EL ADMINISTRADOR */}
       <Route path="/administration" element={<Administration />} />
       <Route path="/administration/users" element={<Users />} />
