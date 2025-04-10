@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Role, Permission, Plan, WhatsAppAccount, Instance, Chatbot, ChatbotSettings, ChatbotItem, Message
+from .models import *
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -35,3 +35,5 @@ admin.site.register(Chatbot)
 admin.site.register(ChatbotSettings)
 admin.site.register(ChatbotItem)
 admin.site.register(Message)
+admin.site.register(ContactGroup)
+admin.site.register(Contact)

@@ -61,7 +61,7 @@ const Contacts = () => {
                                 <FaSearch className="search-icon" />
                                 <input type="text" placeholder="Search" />
                             </div>
-                            <button className="add-button">
+                            <button className="add-button" onClick={() => navigate("create")}>
                                 <FaPlus />
                             </button>
                         </Col>
@@ -100,11 +100,11 @@ const Contacts = () => {
                                                         <input type="checkbox" />
                                                     </td>
                                                     <td><strong>{group.name}</strong></td>
-                                                    <td>0</td> {/* TOTAL */}
-                                                    <td>0</td> {/* VALID */}
-                                                    <td>0</td> {/* INVALID */}
-                                                    <td>0</td> {/* VALIDATING */}
-                                                    <td>0</td> {/* DUPLICATE */}
+                                                    <td>0</td> 
+                                                    <td>0</td> 
+                                                    <td>0</td> 
+                                                    <td>0</td> 
+                                                    <td>0</td> 
                                                     <td>
                                                         {group.status === "enable" ? (
                                                             <span style={{ background: "#B3E5FC", borderRadius: "50%", padding: "4px 6px" }}>
