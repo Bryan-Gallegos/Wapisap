@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Topbar from "../../../components/Topbar/Topbar";
 import WhatsappMenu from "../../../components/WhatsAppMenu/WhatsAppMenu";
-import { Container, Row, Col, Table } from "react-bootstrap";
+import { Container, Row, Col, Table, Modal, Button } from "react-bootstrap";
 import { FaSearch, FaPlus, FaAddressBook } from "react-icons/fa";
-import { getUserProfile, getContactGroups } from "../../../services/api";
+import { getUserProfile, getContactGroups, deleteContactGroup } from "../../../services/api";
 import emptyBox from "../../../assets/empty.png";
 
 import "./Contacts.css";
@@ -13,6 +13,9 @@ import "./Contacts.css";
 const Contacts = () => {
     const [user, setUser] = useState(null);
     const [contactGroups, setContactGroups] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [groupToDelete, setGroupToDelete] = useState(null);
+    const [feedback, setFeedback] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,6 +43,22 @@ const Contacts = () => {
 
         fetchUserData();
     }, [navigate]);
+
+    const handleDelete = (group) => {
+        setGroupToDelete(group);
+        setFeedback(null);
+        setShowModal(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await deleteContactGroup(groupToDelete.id);
+            setContactGroups(prev => prev.filter(g => g.id !== groupToDelete.id));
+            setFeedback({ type: "success", message: "Group eliminated correctly." });
+        } catch (error) {
+            setFeedback({ type: "error", message: "Error deleting the group." });
+        }
+    };
 
     return (
         <div className="whatsapp-contacts-page">
@@ -100,11 +119,11 @@ const Contacts = () => {
                                                         <input type="checkbox" />
                                                     </td>
                                                     <td><strong>{group.name}</strong></td>
-                                                    <td>0</td> 
-                                                    <td>0</td> 
-                                                    <td>0</td> 
-                                                    <td>0</td> 
-                                                    <td>0</td> 
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
                                                     <td>
                                                         {group.status === "enable" ? (
                                                             <span style={{ background: "#B3E5FC", borderRadius: "50%", padding: "4px 6px" }}>
@@ -124,7 +143,7 @@ const Contacts = () => {
                                                             <button className="icon-button" title="Contacts">
                                                                 <i className="fas fa-list" style={{ color: "#666" }}></i>
                                                             </button>
-                                                            <button className="icon-button" title="Delete">
+                                                            <button className="icon-button" title="Delete" onClick={() => handleDelete(group)}>
                                                                 <i className="fas fa-trash" style={{ color: "crimson" }}></i>
                                                             </button>
                                                         </div>
@@ -138,9 +157,41 @@ const Contacts = () => {
                             </div>
                         </Col>
                     </Row>
+
+                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Confirm deletion</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {feedback ? (
+                                <div style={{ color: feedback.type === "success" ? "green" : "crimson" }}>
+                                    {feedback.message}
+                                </div>
+                            ) : (
+                                <>
+                                    Are you sure you want to delete the group{" "}
+                                    <strong>{groupToDelete?.name}</strong>?
+                                </>
+                            )}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {!feedback && (
+                                <>
+                                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+                                    <Button variant="danger" onClick={confirmDelete}>Delete</Button>
+                                </>
+                            )}
+                            {feedback && (
+                                <Button variant="primary" onClick={() => setShowModal(false)}>Close</Button>
+                            )}
+                        </Modal.Footer>
+                    </Modal>
+
                 </Container>
             </div>
         </div>
+
+
     );
 };
 
