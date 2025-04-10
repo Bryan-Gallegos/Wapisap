@@ -5,7 +5,7 @@ import Topbar from "../../../../components/Topbar/Topbar";
 import WhatsappMenu from "../../../../components/WhatsAppMenu/WhatsAppMenu";
 import { Container, Button, Table, Form, Modal } from "react-bootstrap";
 import emptyBox from "../../../../assets/empty.png";
-import { getContactGroups, getUserProfile, createContact, getContacts } from "../../../../services/api";
+import { getContactGroups, getUserProfile, createContact, getContacts, deleteContact } from "../../../../services/api";
 import "./AddContactToContactGroup.css";
 
 const AddContactToContactGroup = () => {
@@ -20,6 +20,9 @@ const AddContactToContactGroup = () => {
     const [newNumbers, setNewNumbers] = useState("");
     const [loadingContacts, setLoadingContacts] = useState([]);
     const [activeTab, setActiveTab] = useState("csv");
+    const [selectedContacts, setSelectedContacts] = useState([]);
+    const [showResultModal, setShowResultModal] = useState(false);
+    const [resultMessage, setResultMessage] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -85,7 +88,36 @@ const AddContactToContactGroup = () => {
         }
     };
 
+    const toggleSelectContact = (id) => {
+        setSelectedContacts(prev =>
+            prev.includes(id)
+                ? prev.filter(cid => cid !== id)
+                : [...prev, id]
+        );
+    };
 
+    const handleDeleteSelectedContacts = async () => {
+        if (selectedContacts.length === 0) return;
+
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (const id of selectedContacts) {
+            try {
+                await deleteContact(id);
+                successCount++;
+                setContacts(prev => prev.filter(c => c.id !== id));
+            } catch (err) {
+                errorCount++;
+            }
+        }
+
+        setSelectedContacts([]);
+        setResultMessage(
+            `✅ ${successCount} contact(s) deleted. ${errorCount > 0 ? `❌ ${errorCount} error(s).` : ""}`
+        );
+        setShowResultModal(true);
+    };
 
     return (
         <div className="whatsapp-addcontact-page">
@@ -103,7 +135,7 @@ const AddContactToContactGroup = () => {
                                 <Button variant="light" onClick={() => setShowImportModal(true)}>
                                     <i className="fas fa-upload"></i> Import
                                 </Button>
-                                <Button variant="danger">
+                                <Button variant="danger" onClick={handleDeleteSelectedContacts}>
                                     <i className="fas fa-trash"></i>
                                 </Button>
                                 <Button variant="secondary" onClick={() => navigate(-1)}>
@@ -137,7 +169,12 @@ const AddContactToContactGroup = () => {
                                     ) : (
                                         contacts.map((contact, idx) => (
                                             <tr key={contact.id}>
-                                                <td><Form.Check /></td>
+                                                <td>
+                                                    <Form.Check
+                                                        checked={selectedContacts.includes(contact.id)}
+                                                        onChange={() => toggleSelectContact(contact.id)}
+                                                    />
+                                                </td>
                                                 <td>{idx + 1}</td>
                                                 <td>{contact.phone_number}</td>
                                                 <td>
@@ -219,6 +256,21 @@ const AddContactToContactGroup = () => {
                         )}
                     </Modal.Body>
                 </Modal>
+
+                <Modal show={showResultModal} onHide={() => setShowResultModal(false)} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Elimination Result</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>{resultMessage}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={() => setShowResultModal(false)}>
+                            OK
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
         </div>
     );
