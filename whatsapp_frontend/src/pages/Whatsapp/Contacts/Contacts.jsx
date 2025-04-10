@@ -118,7 +118,7 @@ const Contacts = () => {
                                                     </td>
                                                     <td>
                                                         <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-                                                            <button className="icon-button" title="Edit">
+                                                            <button className="icon-button" title="Edit" onClick={() => navigate(`edit/${group.id}`)}>
                                                                 <i className="fas fa-edit" style={{ color: "#333" }}></i>
                                                             </button>
                                                             <button className="icon-button" title="Contacts">

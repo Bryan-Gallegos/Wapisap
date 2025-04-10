@@ -923,6 +923,24 @@ export const createContactGroup = async (data) => {
     }
 };
 
+// ✅ Get Contact group by id
+export const getContactGroupById = async (id) => {
+    try{
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("No authenticated user");
+
+        const response = await api.get(`contact-groups/${id}/`,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            },
+        });
+
+        return response.data;
+    }catch(error){
+        console.error("Error getting contact group by id:", error.response?.data || error.message);
+    }
+};
+
 // ✅ Updating an existing contact group
 export const updateContactGroup = async (groupId, data) => {
     try {
